@@ -14,7 +14,7 @@ D: 2
 h: 0.15
 buffer: 0.03
 REALFLY: False
-obstacle_list: [<geometry.polygon object at 0x000001292E6797F0>, <geometry.polygon object at 0x000001292E679860>, <geometry.polygon object at 0x000001292E6798D0>, <geometry.polygon object at 0x000001292E679940>, <geometry.polygon object at 0x000001292E6799B0>, <geometry.polygon object at 0x000001292E679A20>, <geometry.polygon object at 0x000001292E679A90>, <geometry.polygon object at 0x000001292E679B00>, <geometry.polygon object at 0x000001292E679B70>]
+obstacle_list: [<geometry.polygon object at 0x0000021FC98698D0>, <geometry.polygon object at 0x0000021FC9869940>, <geometry.polygon object at 0x0000021FC98699B0>, <geometry.polygon object at 0x0000021FC9869A20>, <geometry.polygon object at 0x0000021FC9869A90>, <geometry.polygon object at 0x0000021FC9869B00>, <geometry.polygon object at 0x0000021FC9869B70>, <geometry.polygon object at 0x0000021FC9869BE0>, <geometry.polygon object at 0x0000021FC9869C50>]
 ini_p: [183.78442466 280.10599458]
 p: [54.43799351  6.22389852]
 v: [-2.71127082e-14  2.96723172e-15]

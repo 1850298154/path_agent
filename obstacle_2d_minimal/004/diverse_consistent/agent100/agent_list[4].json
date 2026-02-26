@@ -4,26 +4,26 @@ plan_time_list: []
 old_path_list: []
 pullback: 1
 pullback_list: []
-tractive_point_list: [(1, array([192.23649203,  65.8697469 ]))]
+tractive_point_list: [(1, array([190.69382997,  48.33227995]))]
 tractive_point_list_list: []
 step_tractive: []
 UnmannedSystem_opt: ['unicycle', 'Mecanum', 'Quadcopter', 'patrol_missile', 'fixed_wing']
-UnmannedSystem: fixed_wing
+UnmannedSystem: unicycle
 shape_list: ['o', 'P', 'X', 'p', '*', '>']
-marker_shape: *
-index: 4
+marker_shape: o
+index: 5
 type: Obstacle-transitor
 K: 8
 D: 2
 h: 0.15
 buffer: 0.03
 REALFLY: False
-obstacle_list: [<geometry.polygon object at 0x0000015695DC9E80>, <geometry.polygon object at 0x0000015695DC9EF0>, <geometry.polygon object at 0x0000015695DC9F60>, <geometry.polygon object at 0x0000015695DC9FD0>, <geometry.polygon object at 0x0000015695DCA040>, <geometry.polygon object at 0x0000015695DCA0B0>, <geometry.polygon object at 0x0000015695DCA120>, <geometry.polygon object at 0x0000015695DCA190>, <geometry.polygon object at 0x0000015695DCA200>]
-ini_p: [100  30]
-p: [100  30]
+obstacle_list: [<geometry.polygon object at 0x000002BA181BA7B0>, <geometry.polygon object at 0x000002BA181BA820>, <geometry.polygon object at 0x000002BA181BA890>, <geometry.polygon object at 0x000002BA181BA900>, <geometry.polygon object at 0x000002BA181BA970>, <geometry.polygon object at 0x000002BA181BA9E0>, <geometry.polygon object at 0x000002BA181BAA50>, <geometry.polygon object at 0x000002BA181BAAC0>, <geometry.polygon object at 0x000002BA181BAB30>]
+ini_p: [180  30]
+p: [180  30]
 v: [0. 0.]
 u: [0. 0.]
-state: [100.  30.   0.   0.]
+state: [180.  30.   0.   0.]
 Umax: 10.0
 Vmax: 3.0
 r_a: 0.8
@@ -321,39 +321,35 @@ Delta_P: [[ 0.015625  0.       -0.015625  0.        0.        0.        0.
  [ 0.        0.        0.        0.        0.        0.        0.
    0.        0.        0.        0.        0.        0.       -0.765625
    0.        0.765625]]
-target: [280 100]
-terminal_p: [100  30]
-path: [[100.          30.        ]
- [192.23649203  65.8697469 ]
- [192.23649203  87.76350797]
- [217.76350797  91.32263106]
- [217.76350797  72.23649203]
- [237.76350797  81.15843061]
- [237.76350797  87.76350797]
- [272.23649203  97.75080508]
- [272.23649203  92.23649203]
- [280.         100.        ]]
+target: [250 150]
+terminal_p: [180  30]
+path: [[180.          30.        ]
+ [190.69382997  48.33227995]
+ [190.69382997  89.30617003]
+ [219.30617003 118.58798846]
+ [219.30617003 119.30617003]
+ [250.         150.        ]]
 cost_index: 8
-pre_traj: [[100.  30.]
- [100.  30.]
- [100.  30.]
- [100.  30.]
- [100.  30.]
- [100.  30.]
- [100.  30.]
- [100.  30.]
- [100.  30.]]
-tractive_point: [192.23649203  65.8697469 ]
-G_p: [192.23649203  65.8697469  192.23649203  65.8697469  192.23649203
-  65.8697469  192.23649203  65.8697469  192.23649203  65.8697469
- 192.23649203  65.8697469  192.23649203  65.8697469  192.23649203
-  65.8697469 ]
+pre_traj: [[180.  30.]
+ [180.  30.]
+ [180.  30.]
+ [180.  30.]
+ [180.  30.]
+ [180.  30.]
+ [180.  30.]
+ [180.  30.]
+ [180.  30.]]
+tractive_point: [190.69382997  48.33227995]
+G_p: [190.69382997  48.33227995 190.69382997  48.33227995 190.69382997
+  48.33227995 190.69382997  48.33227995 190.69382997  48.33227995
+ 190.69382997  48.33227995 190.69382997  48.33227995 190.69382997
+  48.33227995]
 pre_traj_list: []
-position: [100  30]
+position: [180  30]
 rho_0: 10.0
 epsilon: 0.2
 term_overlap: False
-term_last_p: [100  30]
+term_last_p: [180  30]
 E: [0.08 0.08 0.08 0.08 0.08 0.08 0.08 0.08 0.08]
 term_overlap_again: False
 term_index: 0
@@ -362,10 +358,10 @@ W: [0.08 0.08 0.08 0.08 0.08 0.08 0.08 0.08 0.08 0.08]
 ever_reach_target: False
 priority: 2
 contest: False
-distance: 193.13207915827965
+distance: 138.92443989449805
 no_supremacy: True
 min_distance: False
-data: [[ 4.000000e+00  2.000000e+00]
- [ 1.000000e+02  3.000000e+01]
- [ 2.800000e+02  1.000000e+02]
+data: [[ 5.000000e+00  2.000000e+00]
+ [ 1.800000e+02  3.000000e+01]
+ [ 2.500000e+02  1.500000e+02]
  [-9.999999e+06 -9.999999e+06]]

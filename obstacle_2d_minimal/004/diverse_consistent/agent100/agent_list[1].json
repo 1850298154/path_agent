@@ -2,23 +2,23 @@ deadlock: False
 deadlock_info: []
 plan_time_list: []
 old_path_list: []
-pullback: 6
+pullback: 2
 pullback_list: []
-tractive_point_list: [(6, array([ 71.55982254, 288.44017746]))]
+tractive_point_list: [(2, array([89.54586956, 90.45413044]))]
 tractive_point_list_list: []
 step_tractive: []
 UnmannedSystem_opt: ['unicycle', 'Mecanum', 'Quadcopter', 'patrol_missile', 'fixed_wing']
-UnmannedSystem: Mecanum
+UnmannedSystem: Quadcopter
 shape_list: ['o', 'P', 'X', 'p', '*', '>']
-marker_shape: P
-index: 1
+marker_shape: X
+index: 2
 type: Obstacle-transitor
 K: 8
 D: 2
 h: 0.15
 buffer: 0.03
 REALFLY: False
-obstacle_list: [<geometry.polygon object at 0x0000015695DC9240>, <geometry.polygon object at 0x0000015695DC92B0>, <geometry.polygon object at 0x0000015695DC9320>, <geometry.polygon object at 0x0000015695DC9390>, <geometry.polygon object at 0x0000015695DC9400>, <geometry.polygon object at 0x0000015695DC9470>, <geometry.polygon object at 0x0000015695DC94E0>, <geometry.polygon object at 0x0000015695DC9550>, <geometry.polygon object at 0x0000015695DC95C0>]
+obstacle_list: [<geometry.polygon object at 0x000002BA181B9940>, <geometry.polygon object at 0x000002BA181B99B0>, <geometry.polygon object at 0x000002BA181B9A20>, <geometry.polygon object at 0x000002BA181B9A90>, <geometry.polygon object at 0x000002BA181B9B00>, <geometry.polygon object at 0x000002BA181B9B70>, <geometry.polygon object at 0x000002BA181B9BE0>, <geometry.polygon object at 0x000002BA181B9C50>, <geometry.polygon object at 0x000002BA181B9CC0>]
 ini_p: [30 30]
 p: [30 30]
 v: [0. 0.]
@@ -321,16 +321,14 @@ Delta_P: [[ 0.015625  0.       -0.015625  0.        0.        0.        0.
  [ 0.        0.        0.        0.        0.        0.        0.
    0.        0.        0.        0.        0.        0.       -0.765625
    0.        0.765625]]
-target: [100 290]
+target: [150 250]
 terminal_p: [30 30]
 path: [[ 30.          30.        ]
- [ 46.57379838  91.55982254]
- [ 41.55982254  91.55982254]
- [ 41.55982254 138.44017746]
- [ 81.32187991 241.55982254]
- [ 71.55982254 241.55982254]
- [ 71.55982254 288.44017746]
- [100.         290.        ]]
+ [ 62.97498024  90.45413044]
+ [ 89.54586956  90.45413044]
+ [127.43724876 190.45413044]
+ [139.54586956 190.45413044]
+ [150.         250.        ]]
 cost_index: 8
 pre_traj: [[30. 30.]
  [30. 30.]
@@ -341,11 +339,10 @@ pre_traj: [[30. 30.]
  [30. 30.]
  [30. 30.]
  [30. 30.]]
-tractive_point: [ 71.55982254 288.44017746]
-G_p: [ 71.55982254 288.44017746  71.55982254 288.44017746  71.55982254
- 288.44017746  71.55982254 288.44017746  71.55982254 288.44017746
-  71.55982254 288.44017746  71.55982254 288.44017746  71.55982254
- 288.44017746]
+tractive_point: [89.54586956 90.45413044]
+G_p: [89.54586956 90.45413044 89.54586956 90.45413044 89.54586956 90.45413044
+ 89.54586956 90.45413044 89.54586956 90.45413044 89.54586956 90.45413044
+ 89.54586956 90.45413044 89.54586956 90.45413044]
 pre_traj_list: []
 position: [30 30]
 rho_0: 10.0
@@ -360,10 +357,10 @@ W: [0.08 0.08 0.08 0.08 0.08 0.08 0.08 0.08 0.08 0.08]
 ever_reach_target: False
 priority: 2
 contest: False
-distance: 269.2582403567252
+distance: 250.59928172283335
 no_supremacy: True
 min_distance: False
-data: [[ 1.000000e+00  2.000000e+00]
+data: [[ 2.000000e+00  2.000000e+00]
  [ 3.000000e+01  3.000000e+01]
- [ 1.000000e+02  2.900000e+02]
+ [ 1.500000e+02  2.500000e+02]
  [-9.999999e+06 -9.999999e+06]]
