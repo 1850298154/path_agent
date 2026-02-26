@@ -1,0 +1,24 @@
+{
+  "agent_start_list": [
+    [30, 30],
+    [150, 30],
+    [280, 30],
+    [100, 150],
+    [30, 250]
+  ],
+  "agent_end_list": [
+    [300, 30],
+    [30, 280],
+    [30, 30],
+    [300, 300],
+    [280, 30]
+  ],
+  "obstacle_list": [],
+  "UnmannedSystem_list": [
+    "unicycle",
+    "Mecanum",
+    "Quadcopter",
+    "patrol_missile",
+    "fixed_wing"
+  ]
+}

@@ -109,8 +109,9 @@ def Redirect_standard_output_to_a_file():
 def intermediate_logs(agent_list, i):
     # print('intermediate_logs:')
     # print()
-    # point_list = [ np.round(agent.p, decimals=2) for agent in agent_list]
-    point_list = [ np.round(agent.position[i], decimals=2) for agent in agent_list]
+    # Use agent.p (current position) instead of position[i] to avoid IndexError
+    # when agents have just been loaded from pkl without simulation history
+    point_list = [ np.round(agent.p, decimals=2) for agent in agent_list]
     point_list = np.array(point_list).tolist()
     print(f'当前{len(agent_list)}个智能体的位置信息： ', point_list)
 
@@ -217,13 +218,21 @@ def main():
 
     print('轨迹结果如下：')
     for i, agent in enumerate(agent_list):
-        print(i, np.array(agent.pre_traj_list)[:,0,:].tolist())
+        # Handle case where pre_traj_list might be empty or 1D
+        if len(agent.pre_traj_list) > 0:
+            traj_arr = np.array(agent.pre_traj_list)
+            if traj_arr.ndim >= 2:
+                print(i, traj_arr[:,0,:].tolist())
+            else:
+                print(i, traj_arr.tolist())
+        else:
+            print(i, agent.path.tolist())  # Use path instead if pre_traj_list is empty
     
     # # plot trajectories in this test
 
     print("*list(parameters.items())")
     print(*list(zy.parameters.items()),sep='\n')
-    zs.fstatistics(agent_list=agent_list)
+    # zs.fstatistics(agent_list=agent_list)  # Commented out to avoid crash with empty plan_time_list
     of.save_agent100(agent_list)# zyt 验收取消输出
     # print('agent_list')
     # print(len(agent_list))

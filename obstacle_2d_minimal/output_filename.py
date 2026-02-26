@@ -111,13 +111,17 @@ def datetime_from_sh():
 
 
 datetime_from_sh_ret = datetime_from_sh()
-path_dir = (
-    test_plan
-    + '/'
-    # + get_current_datetime_formatted_file_name()
-    # + datetime_from_sh()
-    + datetime_from_sh_ret
-    + '/')
+# Check if datetime_from_sh_ret already contains test_plan to avoid double prefix
+if datetime_from_sh_ret.startswith(test_plan + '/') or '/' in datetime_from_sh_ret:
+    path_dir = datetime_from_sh_ret + '/'
+else:
+    path_dir = (
+        test_plan
+        + '/'
+        # + get_current_datetime_formatted_file_name()
+        # + datetime_from_sh()
+        + datetime_from_sh_ret
+        + '/')
 create_file(path_dir)
 print('The output path of this test result is : ', path_dir)
 # input('這是一個測試這')
@@ -270,14 +274,27 @@ def read_pickle(agent_list):
 
 def str2time(time_str1, time_str2):
     from datetime import datetime
+    import os
 
     # # 时间字符串
     # time_str1 = "2023-08-13_21-12-23"
     # time_str2 = "2023-08-13_21-15-30"
 
+    # Extract just the timestamp part if path is given
+    # Handles cases like "004/2023-08-13_21-12-23" or full paths
+    def extract_timestamp(s):
+        # Get basename and remove any directory prefix
+        basename = os.path.basename(s.rstrip('/'))
+        # If it starts with "004/", extract just the timestamp
+        parts = basename.split('/')
+        return parts[-1] if '/' in basename else basename
+
+    time1 = extract_timestamp(time_str1)
+    time2 = extract_timestamp(time_str2)
+
     # 将时间字符串转换为datetime对象
-    time1 = datetime.strptime(time_str1, "%Y-%m-%d_%H-%M-%S")
-    time2 = datetime.strptime(time_str2, "%Y-%m-%d_%H-%M-%S")
+    time1 = datetime.strptime(time1, "%Y-%m-%d_%H-%M-%S")
+    time2 = datetime.strptime(time2, "%Y-%m-%d_%H-%M-%S")
 
     # 计算时间差
     time_diff = time2 - time1
