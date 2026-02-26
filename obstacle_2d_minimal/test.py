@@ -127,10 +127,16 @@ def main():
     # os.mkdir('data')
 
     # the initialization this program
-    SET.initialize_set()
-    read_pkl()
-
     global agent_list
+    agent_list = []
+    SET.initialize_set()
+
+    # 尝试从pkl读取，如果失败则使用initialize()
+    try:
+        read_pkl()
+    except:
+        print("无法读取pkl文件，使用initialize()从参数初始化...")
+        agent_list = initialize()
     print("zy.parameters['baseline_bool']")
     print(zy.parameters['baseline_bool'])
     if zy.parameters['baseline_bool'] == True:   
