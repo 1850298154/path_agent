@@ -37,7 +37,6 @@ ob.num: 2
 ob.rate: 0.05
 ob.upper_limit_Square_side_length: 20.56194904089777
 
-# 障碍物列表 (圆形: [center_x, center_y, radius])
 obstacle_list:
     - [150, 150, 50]
     - [220, 80, 40]
