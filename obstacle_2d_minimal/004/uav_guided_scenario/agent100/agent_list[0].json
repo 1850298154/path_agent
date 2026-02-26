@@ -2,9 +2,9 @@ deadlock: False
 deadlock_info: []
 plan_time_list: []
 old_path_list: []
-pullback: 1
+pullback: 13
 pullback_list: []
-tractive_point_list: [(1, array([ 58.14825676, 280.64530784]))]
+tractive_point_list: [(13, array([ 58.14825676, 280.64530784]))]
 tractive_point_list_list: []
 step_tractive: []
 UnmannedSystem_opt: ['unicycle', 'Mecanum', 'Quadcopter', 'patrol_missile', 'fixed_wing']
@@ -18,7 +18,7 @@ D: 2
 h: 0.15
 buffer: 0.03
 REALFLY: False
-obstacle_list: [<geometry.polygon object at 0x0000020B17FE1BD0>, <geometry.polygon object at 0x0000020B18110A50>, <geometry.polygon object at 0x0000020B18110AF0>, <geometry.polygon object at 0x0000020B1807D490>, <geometry.polygon object at 0x0000020B181192D0>, <geometry.polygon object at 0x0000020B18119550>, <geometry.polygon object at 0x0000020B180DD0F0>, <geometry.polygon object at 0x0000020B180DD1D0>, <geometry.polygon object at 0x0000020B180DD240>]
+obstacle_list: [<geometry.polygon object at 0x00000216B25115A0>, <geometry.polygon object at 0x00000216B25AF7F0>, <geometry.polygon object at 0x00000216B25AF890>, <geometry.polygon object at 0x00000216B246E4E0>, <geometry.polygon object at 0x00000216B25BC9D0>, <geometry.polygon object at 0x00000216B25BCC50>, <geometry.polygon object at 0x00000216B257D080>, <geometry.polygon object at 0x00000216B257D160>, <geometry.polygon object at 0x00000216B257D1D0>]
 ini_p: [30. 30.]
 p: [30. 30.]
 v: [0. 0.]
@@ -324,6 +324,18 @@ Delta_P: [[ 0.015625  0.       -0.015625  0.        0.        0.        0.
 target: [ 58.14825676 280.64530784]
 terminal_p: [30. 30.]
 path: [[ 30.          30.        ]
+ [ 32.23203184  49.8750606 ]
+ [ 34.46406369  69.7501212 ]
+ [ 36.69609553  89.6251818 ]
+ [ 38.92812738 109.5002424 ]
+ [ 41.16015922 129.375303  ]
+ [ 43.39219107 149.2503636 ]
+ [ 45.62422291 169.1254242 ]
+ [ 47.85625476 189.0004848 ]
+ [ 50.0882866  208.8755454 ]
+ [ 52.32031845 228.750606  ]
+ [ 54.55235029 248.6256666 ]
+ [ 56.78438214 268.5007272 ]
  [ 58.14825676 280.64530784]]
 cost_index: 8
 pre_traj: [[30. 30.]
