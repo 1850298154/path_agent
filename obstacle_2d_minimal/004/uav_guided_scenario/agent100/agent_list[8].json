@@ -2,9 +2,9 @@ deadlock: False
 deadlock_info: []
 plan_time_list: []
 old_path_list: []
-pullback: 3
+pullback: 12
 pullback_list: []
-tractive_point_list: [(3, array([ 58.92395055, 254.72246307]))]
+tractive_point_list: [(12, array([ 58.92395055, 254.72246307]))]
 tractive_point_list_list: []
 step_tractive: []
 UnmannedSystem_opt: ['unicycle', 'Mecanum', 'Quadcopter', 'patrol_missile', 'fixed_wing']
@@ -18,7 +18,7 @@ D: 2
 h: 0.15
 buffer: 0.03
 REALFLY: False
-obstacle_list: [<geometry.polygon object at 0x0000020B180DEE40>, <geometry.polygon object at 0x0000020B180DEEB0>, <geometry.polygon object at 0x0000020B180DEF20>, <geometry.polygon object at 0x0000020B180DEF90>, <geometry.polygon object at 0x0000020B180DF000>, <geometry.polygon object at 0x0000020B180DF070>, <geometry.polygon object at 0x0000020B180DF0E0>, <geometry.polygon object at 0x0000020B180DF150>, <geometry.polygon object at 0x0000020B180DF1C0>]
+obstacle_list: [<geometry.polygon object at 0x00000216B257EDD0>, <geometry.polygon object at 0x00000216B257EE40>, <geometry.polygon object at 0x00000216B257EEB0>, <geometry.polygon object at 0x00000216B257EF20>, <geometry.polygon object at 0x00000216B257EF90>, <geometry.polygon object at 0x00000216B257F000>, <geometry.polygon object at 0x00000216B257F070>, <geometry.polygon object at 0x00000216B257F0E0>, <geometry.polygon object at 0x00000216B257F150>]
 ini_p: [30. 30.]
 p: [30. 30.]
 v: [0. 0.]
@@ -324,8 +324,17 @@ Delta_P: [[ 0.015625  0.       -0.015625  0.        0.        0.        0.
 target: [ 58.92395055 254.72246307]
 terminal_p: [30. 30.]
 path: [[ 30.          30.        ]
- [ 42.35277847 125.97398525]
- [ 42.35277847 137.64722153]
+ [ 32.55313214  49.83636853]
+ [ 35.10626427  69.67273705]
+ [ 37.65939641  89.50910558]
+ [ 40.21252855 109.3454741 ]
+ [ 42.76566069 129.18184263]
+ [ 45.31879282 149.01821115]
+ [ 47.87192496 168.85457968]
+ [ 50.4250571  188.69094821]
+ [ 52.97818923 208.52731673]
+ [ 55.53132137 228.36368526]
+ [ 58.08445351 248.20005378]
  [ 58.92395055 254.72246307]]
 cost_index: 8
 pre_traj: [[30. 30.]
