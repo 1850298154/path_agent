@@ -694,7 +694,7 @@ def convert(read_parameters, parameters):
 def read_input_para(yaml_path):
     global parameters
     # with open(of.path_dir + 'parameters.yaml', 'r') as file:
-    with open(yaml_path, 'r') as file:
+    with open(yaml_path, 'r', encoding='utf-8') as file:
         read_parameters = yaml.safe_load(file)
     print('******************************** zyaml. read_input_para')
     print('read_parameters')

@@ -30,12 +30,13 @@ class BugPlanner:
         """检查点是否与障碍物碰撞"""
         for ob in self.obstacle_list:
             center = np.array(ob[0])
-            half_size = ob[1] / 2.0
-            # 简单的矩形碰撞检测
-            if (point[0] >= center[0] - half_size - self.inflated_size/2 and
-                point[0] <= center[0] + half_size + self.inflated_size/2 and
-                point[1] >= center[1] - half_size - self.inflated_size/2 and
-                point[1] <= center[1] + half_size + self.inflated_size/2):
+            half_width = ob[1] / 2.0
+            half_height = ob[2] / 2.0
+            # 矩形碰撞检测
+            if (point[0] >= center[0] - half_width - self.inflated_size/2 and
+                point[0] <= center[0] + half_width + self.inflated_size/2 and
+                point[1] >= center[1] - half_height - self.inflated_size/2 and
+                point[1] <= center[1] + half_height + self.inflated_size/2):
                 return True
         return False
 
@@ -196,14 +197,13 @@ def path_plan(agent_index, start_point, end_point, obstacle_list,
 
 
 def obstacle_adapter(obstacle_list=zr.obstacles):
+    # 将圆形障碍物 [center_x, center_y, radius] 转换为方形障碍物格式 [center, width, height]
+    # 使用直径作为方形边长，确保碰撞检测区域正确
     obstacle_list = [
         [
-            [
-                ob[0]+ob[-1]/2,
-                ob[1]+ob[-1]/2
-            ],
-            ob[-1],
-            ob[-1]
+            [ob[0], ob[1]],  # 中心点保持不变
+            ob[-1] * 2,      # 宽度 = 直径
+            ob[-1] * 2       # 高度 = 直径
         ]
         for ob in obstacle_list]
     return obstacle_list
