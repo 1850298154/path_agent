@@ -2,28 +2,28 @@ deadlock: False
 deadlock_info: []
 plan_time_list: []
 old_path_list: []
-pullback: 2
+pullback: 1
 pullback_list: []
-tractive_point_list: [(2, array([ 92.48378178, 237.51621822]))]
+tractive_point_list: [(1, array([192.23649203,  65.8697469 ]))]
 tractive_point_list_list: []
 step_tractive: []
 UnmannedSystem_opt: ['unicycle', 'Mecanum', 'Quadcopter', 'patrol_missile', 'fixed_wing']
 UnmannedSystem: fixed_wing
 shape_list: ['o', 'P', 'X', 'p', '*', '>']
 marker_shape: *
-index: 9
+index: 4
 type: Obstacle-transitor
 K: 8
 D: 2
 h: 0.15
 buffer: 0.03
 REALFLY: False
-obstacle_list: [<geometry.polygon object at 0x0000015695DCB380>, <geometry.polygon object at 0x0000015695DCB230>, <geometry.polygon object at 0x0000015695DCB2A0>, <geometry.polygon object at 0x0000015695DCB310>, <geometry.polygon object at 0x0000015695DCB3F0>, <geometry.polygon object at 0x0000015695DCB460>, <geometry.polygon object at 0x0000015695DCB4D0>, <geometry.polygon object at 0x0000015695DCB540>, <geometry.polygon object at 0x0000015695DCB5B0>]
-ini_p: [ 30 200]
-p: [ 30 200]
+obstacle_list: [<geometry.polygon object at 0x000002BA181BA2E0>, <geometry.polygon object at 0x000002BA181BA350>, <geometry.polygon object at 0x000002BA181BA3C0>, <geometry.polygon object at 0x000002BA181BA430>, <geometry.polygon object at 0x000002BA181BA4A0>, <geometry.polygon object at 0x000002BA181BA510>, <geometry.polygon object at 0x000002BA181BA580>, <geometry.polygon object at 0x000002BA181BA5F0>, <geometry.polygon object at 0x000002BA181BA660>]
+ini_p: [100  30]
+p: [100  30]
 v: [0. 0.]
 u: [0. 0.]
-state: [ 30. 200.   0.   0.]
+state: [100.  30.   0.   0.]
 Umax: 10.0
 Vmax: 3.0
 r_a: 0.8
@@ -321,36 +321,39 @@ Delta_P: [[ 0.015625  0.       -0.015625  0.        0.        0.        0.
  [ 0.        0.        0.        0.        0.        0.        0.
    0.        0.        0.        0.        0.        0.       -0.765625
    0.        0.765625]]
-target: [300 250]
-terminal_p: [ 30 200]
-path: [[ 30.         200.        ]
- [ 92.48378178 211.5710707 ]
- [ 92.48378178 237.51621822]
- [242.48378178 246.53993349]
- [242.48378178 242.48378178]
- [287.51621822 242.48378178]
- [300.         250.        ]]
+target: [280 100]
+terminal_p: [100  30]
+path: [[100.          30.        ]
+ [192.23649203  65.8697469 ]
+ [192.23649203  87.76350797]
+ [217.76350797  91.32263106]
+ [217.76350797  72.23649203]
+ [237.76350797  81.15843061]
+ [237.76350797  87.76350797]
+ [272.23649203  97.75080508]
+ [272.23649203  92.23649203]
+ [280.         100.        ]]
 cost_index: 8
-pre_traj: [[ 30. 200.]
- [ 30. 200.]
- [ 30. 200.]
- [ 30. 200.]
- [ 30. 200.]
- [ 30. 200.]
- [ 30. 200.]
- [ 30. 200.]
- [ 30. 200.]]
-tractive_point: [ 92.48378178 237.51621822]
-G_p: [ 92.48378178 237.51621822  92.48378178 237.51621822  92.48378178
- 237.51621822  92.48378178 237.51621822  92.48378178 237.51621822
-  92.48378178 237.51621822  92.48378178 237.51621822  92.48378178
- 237.51621822]
+pre_traj: [[100.  30.]
+ [100.  30.]
+ [100.  30.]
+ [100.  30.]
+ [100.  30.]
+ [100.  30.]
+ [100.  30.]
+ [100.  30.]
+ [100.  30.]]
+tractive_point: [192.23649203  65.8697469 ]
+G_p: [192.23649203  65.8697469  192.23649203  65.8697469  192.23649203
+  65.8697469  192.23649203  65.8697469  192.23649203  65.8697469
+ 192.23649203  65.8697469  192.23649203  65.8697469  192.23649203
+  65.8697469 ]
 pre_traj_list: []
-position: [ 30 200]
+position: [100  30]
 rho_0: 10.0
 epsilon: 0.2
 term_overlap: False
-term_last_p: [ 30 200]
+term_last_p: [100  30]
 E: [0.08 0.08 0.08 0.08 0.08 0.08 0.08 0.08 0.08]
 term_overlap_again: False
 term_index: 0
@@ -359,10 +362,10 @@ W: [0.08 0.08 0.08 0.08 0.08 0.08 0.08 0.08 0.08 0.08]
 ever_reach_target: False
 priority: 2
 contest: False
-distance: 274.5906043549196
+distance: 193.13207915827965
 no_supremacy: True
 min_distance: False
-data: [[ 9.000000e+00  2.000000e+00]
- [ 3.000000e+01  2.000000e+02]
- [ 3.000000e+02  2.500000e+02]
+data: [[ 4.000000e+00  2.000000e+00]
+ [ 1.000000e+02  3.000000e+01]
+ [ 2.800000e+02  1.000000e+02]
  [-9.999999e+06 -9.999999e+06]]
