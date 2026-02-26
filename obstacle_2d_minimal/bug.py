@@ -1,19 +1,120 @@
 import output_filename as of
 import zrand as zr
-# from bug5 import *
-# from bug6 import *
-# from bug7 import *
-# from bug8 import *
-# from bug9 import *
-# from bug10 import *
-from bug11 import *
-# import math
-# import numpy as np
-# import time
-# import copy
-# import matplotlib.pyplot as plt
+import numpy as np
+import time
+import math
 
 cnt = 0
+
+
+class BugPlanner:
+    """简化的BUG路径规划算法实现"""
+    def __init__(self, start_point, end_point, step_size, inflated_size, obstacle_list):
+        self.start = np.array(start_point, dtype=float)
+        self.goal = np.array(end_point, dtype=float)
+        self.step_size = step_size
+        self.inflated_size = inflated_size
+        self.obstacle_list = obstacle_list
+        self.path = [self.start.copy()]
+        self.current = self.start.copy()
+        self.mode = 'direct'  # 'direct' = direct to goal, 'follow' = follow obstacle
+        self.leaving_point = None
+        self.goal_direction = (self.goal - self.start)
+        self.goal_distance = np.linalg.norm(self.goal_direction)
+        if self.goal_distance > 0:
+            self.goal_direction = self.goal_direction / self.goal_distance
+        self.max_steps = 1000
+        self.step_count = 0
+
+    def is_collision(self, point):
+        """检查点是否与障碍物碰撞"""
+        for ob in self.obstacle_list:
+            center = np.array(ob[0])
+            half_size = ob[1] / 2.0
+            # 简单的矩形碰撞检测
+            if (point[0] >= center[0] - half_size - self.inflated_size/2 and
+                point[0] <= center[0] + half_size + self.inflated_size/2 and
+                point[1] >= center[1] - half_size - self.inflated_size/2 and
+                point[1] <= center[1] + half_size + self.inflated_size/2):
+                return True
+        return False
+
+    def run(self):
+        """运行BUG算法"""
+        while self.step_count < self.max_steps:
+            self.step_count += 1
+
+            # 检查是否到达目标
+            if np.linalg.norm(self.current - self.goal) < self.step_size:
+                self.path.append(self.goal.copy())
+                break
+
+            if self.mode == 'direct':
+                # 直接朝目标移动
+                direction = self.goal - self.current
+                dist = np.linalg.norm(direction)
+                if dist > 0:
+                    direction = direction / dist
+                next_pos = self.current + direction * self.step_size
+
+                # 检查是否即将碰撞
+                if self.is_collision(next_pos):
+                    self.mode = 'follow'
+                    self.leaving_point = self.current.copy()
+                    # 计算绕障碍物方向（逆时针）
+                    perp = np.array([-direction[1], direction[0]])
+                    self.follow_direction = perp
+                else:
+                    self.current = next_pos
+                    self.path.append(self.current.copy())
+
+            elif self.mode == 'follow':
+                # 沿障碍物边界移动
+                # 尝试多个方向找到可行路径
+                directions = [
+                    self.follow_direction,
+                    np.array([-self.follow_direction[1], self.follow_direction[0]]),
+                    -self.follow_direction,
+                    np.array([self.follow_direction[1], -self.follow_direction[0]])
+                ]
+
+                moved = False
+                for direction in directions:
+                    next_pos = self.current + direction * self.step_size
+                    if not self.is_collision(next_pos):
+                        self.current = next_pos
+                        self.path.append(self.current.copy())
+                        self.follow_direction = direction
+                        moved = True
+                        break
+
+                if not moved:
+                    # 如果无法移动，尝试随机方向
+                    angle = np.random.uniform(0, 2 * np.pi)
+                    direction = np.array([np.cos(angle), np.sin(angle)])
+                    next_pos = self.current + direction * self.step_size
+                    if not self.is_collision(next_pos):
+                        self.current = next_pos
+                        self.path.append(self.current.copy())
+
+                # 检查是否可以离开障碍物
+                to_goal = self.goal - self.current
+                dist_to_goal = np.linalg.norm(to_goal)
+                if dist_to_goal > 0:
+                    to_goal = to_goal / dist_to_goal
+
+                    # 检查离开点距离
+                    dist_from_leaving = np.linalg.norm(self.current - self.leaving_point)
+                    if dist_from_leaving > self.step_size * 5:  # 确保离开足够远
+                        # 检查是否可以直接朝目标移动
+                        test_pos = self.current + to_goal * self.step_size
+                        if not self.is_collision(test_pos):
+                            # 检查是否比离开点更接近目标
+                            if np.linalg.norm(self.current - self.goal) < np.linalg.norm(self.leaving_point - self.goal) - self.step_size:
+                                self.mode = 'direct'
+
+        # 转换为numpy数组
+        self.path = np.array(self.path)
 
 
 # def path_plan(start_point, end_point, obstacle_list, step_size=zr.bug_step_size, inflated_size=zr.inflated_size):

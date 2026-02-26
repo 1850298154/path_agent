@@ -5,11 +5,11 @@ import SET
 from uav import *
 import numpy as np
 import multiprocessing as mp
-from thread import *
+# from thread import *  # Commented: thread module deleted in P0 cleanup
 # from group_corridor import *
-from obstacle_corridor import *
-from inter_avoid import *
-from connection import *
+# from obstacle_corridor import *  # Commented: module deleted in P0 cleanup
+# from inter_avoid import *  # Commented: module deleted in P0 cleanup
+# from connection import *  # Commented: module deleted in P0 cleanup
 import cvxpy as cp
 from trajectory import *
 from plot import *
