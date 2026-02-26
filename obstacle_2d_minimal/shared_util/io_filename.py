@@ -59,17 +59,25 @@ class IOManager:
     def __init__(self, datetime:str=ag.get_datetime()) -> None:
         """
             初始化只会调用一次， 就是在第一次调用该函数， 以后在访问datetime就是第一次调用的值。
-                因此，pyqt 不能使用， 
+                因此，pyqt 不能使用，
                 而， zqt_model_process 可以， 因为只是获取到参数
-                
+
             创建管理路径path_dir=   004/2023-09-16_13-16-47/
         """
-        self.path_dir = (
-                IOManager.qtplan
-                + '/'
-                + datetime
-                + '/'
-            )
+        # Check if datetime already contains qtplan prefix to avoid double prefix
+        if datetime.startswith(IOManager.qtplan + '/') or '/' in datetime:
+            # Already has plan prefix or is a full path
+            if not datetime.endswith('/'):
+                datetime = datetime + '/'
+            self.path_dir = datetime
+        else:
+            # Just timestamp, add plan prefix
+            self.path_dir = (
+                    IOManager.qtplan
+                    + '/'
+                    + datetime
+                    + '/'
+                )
         self.agent100_path_dir = self.path_dir + '/agent100/'
         self.create_file(self.path_dir)
         self.create_file(self.agent100_path_dir)

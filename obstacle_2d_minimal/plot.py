@@ -512,9 +512,11 @@ def plot_position(
                     alpha=0.5,
                     )
                     # marker='d', s=600, zorder=3, edgecolor='k', color=color[i])
+        # Use path if position is 1D (no simulation history)
+        pos_data = agent_list[i].path if agent_list[i].position.ndim == 1 else agent_list[i].position
         plt.plot(
-                agent_list[i].position[:, 0][::-1], 
-                agent_list[i].position[:, 1][::-1],
+                pos_data[:, 0][::-1],
+                pos_data[:, 1][::-1],
                 zorder=2, c=color[i], linewidth=4,
                 alpha=0.3,
                 marker=marker_shape,
