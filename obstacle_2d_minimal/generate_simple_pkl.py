@@ -6,8 +6,12 @@ import json
 import numpy as np
 import pickle
 
-# 设置输出目录
-output_dir = "004/uav_guided_scenario"
+# 设置输出目录（使用命令行参数或默认值）
+import os
+if len(sys.argv) >= 2:
+    output_dir = sys.argv[1]
+else:
+    output_dir = "004/uav_guided_scenario"
 
 # 读取description.json
 with open(f"{output_dir}/description.json", 'r') as f:

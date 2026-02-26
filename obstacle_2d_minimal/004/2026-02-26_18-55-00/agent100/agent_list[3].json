@@ -8,17 +8,17 @@ tractive_point_list: [(13, array([ 58.15, 280.65]))]
 tractive_point_list_list: []
 step_tractive: []
 UnmannedSystem_opt: ['unicycle', 'Mecanum', 'Quadcopter', 'patrol_missile', 'fixed_wing']
-UnmannedSystem: patrol_missile
+UnmannedSystem: unicycle
 shape_list: ['o', 'P', 'X', 'p', '*', '>']
-marker_shape: p
-index: 3
+marker_shape: o
+index: 0
 type: Obstacle-transitor
 K: 8
 D: 2
 h: 0.15
 buffer: 0.03
 REALFLY: False
-obstacle_list: [<geometry.polygon object at 0x000001FE180BDA20>, <geometry.polygon object at 0x000001FE180BDA90>, <geometry.polygon object at 0x000001FE180BDB00>, <geometry.polygon object at 0x000001FE180BDB70>, <geometry.polygon object at 0x000001FE180BDBE0>, <geometry.polygon object at 0x000001FE180BDC50>, <geometry.polygon object at 0x000001FE180BDCC0>, <geometry.polygon object at 0x000001FE180BDD30>, <geometry.polygon object at 0x000001FE180BDDA0>]
+obstacle_list: [<geometry.polygon object at 0x0000026117FEA150>, <geometry.polygon object at 0x000002611811C370>, <geometry.polygon object at 0x000002611811C410>, <geometry.polygon object at 0x0000026117FDEF90>, <geometry.polygon object at 0x0000026118126050>, <geometry.polygon object at 0x00000261181262D0>, <geometry.polygon object at 0x00000260E51E3230>, <geometry.polygon object at 0x00000261180AF4D0>, <geometry.polygon object at 0x00000261180AF5B0>]
 ini_p: [30. 30.]
 p: [30. 30.]
 v: [0. 0.]
@@ -367,7 +367,7 @@ contest: False
 distance: 252.2257817908391
 no_supremacy: True
 min_distance: False
-data: [[ 3.000000e+00  2.000000e+00]
+data: [[ 0.000000e+00  2.000000e+00]
  [ 3.000000e+01  3.000000e+01]
  [ 5.815000e+01  2.806500e+02]
  [-9.999999e+06 -9.999999e+06]]

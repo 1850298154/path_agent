@@ -65,7 +65,7 @@ class IOManager:
             创建管理路径path_dir=   004/2023-09-16_13-16-47/
         """
         # Check if datetime already contains qtplan prefix to avoid double prefix
-        if datetime.startswith(IOManager.qtplan + '/') or '/' in datetime:
+        if datetime and (datetime.startswith(IOManager.qtplan + '/') or '/' in datetime):
             # Already has plan prefix or is a full path
             if not datetime.endswith('/'):
                 datetime = datetime + '/'

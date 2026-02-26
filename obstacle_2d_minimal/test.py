@@ -130,6 +130,15 @@ def main():
     # the initialization this program
     global agent_list
     agent_list = []
+
+    # 构造yaml文件路径：如果指定了目录则使用，否则使用output_filename的默认路径
+    if len(sys.argv) >= 3:
+        yaml_path = sys.argv[2]
+    else:
+        yaml_path = os.path.join(of.path_dir, 'parameters.yaml')
+
+    # 初始化SET，传入yaml路径
+    SET.yaml_path = yaml_path
     SET.initialize_set()
 
     # 尝试从pkl读取，如果失败则使用initialize()
