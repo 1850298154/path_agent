@@ -20,7 +20,8 @@ UAV_DATA_PATH = '../uav_allocation_analysis/uav_positions_over_time.json'
 OUTPUT_DIR = '005/uav_guided_scenario'
 
 # 选择的UAV ID列表（从0-79中选择，最多10个）
-SELECTED_UAV_IDS = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+# 策略：混合选择两个基地的UAV，确保路径多样性
+SELECTED_UAV_IDS = [0, 1, 2, 3, 4, 10, 20, 30, 40, 50]
 
 # 地图尺寸
 MAP_SIZE = 330.0
