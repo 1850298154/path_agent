@@ -8,7 +8,7 @@ import numpy as np
 import time
 import os
 import sys
-import zdist as zd
+# import zdist as zd  # Removed: zd module does not exist
 sys.path.append(os.getcwd())
 
 print(sys.path)  # zyt 这里是为了ompl 和 openGJK 吧

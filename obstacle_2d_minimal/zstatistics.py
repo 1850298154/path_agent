@@ -340,10 +340,35 @@ def find_min_in_nested_list(nested_list):
     return min(min(inner_list) for inner_list in nested_list)
 
 def calculate_average_planning_time(agent_list):
-    # 规划时间 ( agent_list有100个agent，每个agent有200个规划时间，agent.plan_time_list=[0:00:04.678481 ... 0:00:05.678481] 统计)
+    # 处理空plan_time_list的情况
+    has_plan_time = any(agent.plan_time_list and agent.plan_time_list for agent in agent_list)
+
+    if not has_plan_time:
+        return 0.0, 0.0, 0.0
+
     total_planning_time = sum(time_total_seconds_float
                               for agent in agent_list
                               for time_total_seconds_float in agent.plan_time_list)
+    agents_steps = (len(agent_list) * len(agent_list[0].plan_time_list))
+    if agents_steps == 0:
+        return 0.0, 0.0, 0.0
+
+    average_planning_time = datetime.timedelta(
+            seconds=(total_planning_time / agents_steps))
+    average_planning_time_total_seconds_float = float(
+        average_planning_time.total_seconds())
+
+    min_value = float('inf')
+    max_value = 0.0
+
+    for agent in agent_list:
+        if agent.plan_time_list:
+            agent_min = min(agent.plan_time_list)
+            agent_max = max(agent.plan_time_list)
+            min_value = min(min_value, agent_min)
+            max_value = max(max_value, agent_max)
+
+    return average_planning_time_total_seconds_float, min_value, max_value
     agents_steps = (len(agent_list) * len(agent_list[0].plan_time_list))
     if np.isclose(agents_steps, 0, atol=1e-8):
         average_planning_time = datetime.timedelta(0)
