@@ -17,14 +17,14 @@
                     ↓ 手动触发
                     ↓ 自动检测
 ┌─────────────────────────────────────────────────────────────────────────┐
-│         调度管理器 (schedule_manager.py)            │
+│         调度管理器 (scheduler.py)            │
 │  - 接收 UAV 完成信号                          │
 │ - 检查状态                                       │
 │ - 触发路径规划                                   │
 └─────────────────────────────────────────────────────────────────────────┘
                           ↓ 触发命令
                     ↓ 保存测试配置
-                    ↓ 执行 test.py
+                    ↓ 执行 test.py (在 obstacle_2d_minimal/)
 ┌─────────────────────────────────────────────────────────────────────────┐
 │         智能体路径规划 (test.py + run.py)            │
 │  - 读取 pkl 文件中的轨迹                          │
@@ -38,8 +38,8 @@
 ### 1. 启动调度管理器
 
 ```bash
-cd obstacle_2d_minimal
-python schedule_manager.py
+cd uav_allocation_analysis
+python scheduler.py
 ```
 
 ### 2. 使用命令
@@ -69,13 +69,17 @@ python schedule_manager.py
 ### 3. 文件结构
 
 ```
-obstacle_2d_minimal/
-├── schedule_manager.py      # 调度管理器主程序
-├── scheduled_results/        # 自动调度的测试结果
-│   ├── <timestamp>/        # 调度时间戳目录
-│   │   ├── test_config.json  # 测试配置
-│   │   └── parameters.yaml    # 测试参数
-└── test_parameters.yaml     # 手动触发的测试配置
+uav_allocation_analysis/
+├── scheduler.py            # 调度管理器主程序
+├── SCHEDULER_README.md     # 调度管理器文档
+├── run_scheduled.py        # 测试执行脚本
+├── test_parameters.yaml     # 手动触发的测试配置
+├── scheduled_results/       # 自动调度的测试结果
+│   └── <timestamp>/       # 调度时间戳目录
+│       ├── test_config.json # 测试配置
+│       └── parameters.yaml   # 测试参数
+├── uav_positions_over_time.json  # UAV位置数据
+└── allocation_details.txt   # UAV分配详情
 ```
 
 ### 4. 配置文件格式

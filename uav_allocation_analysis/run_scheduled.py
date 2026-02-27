@@ -26,7 +26,7 @@ def run_path_planning(config: dict) -> str:
     test_args = [test_config_path]
 
     # 切换到脚本目录
-    script_dir = os.path.dirname(os.path.abspath(__file__))
+    script_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'obstacle_2d_minimal')
 
     # 构建测试参数文件路径
     # 注意：调度管理器会生成 scheduled_results/<timestamp>/parameters.yaml

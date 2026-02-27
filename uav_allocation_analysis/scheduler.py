@@ -522,7 +522,7 @@ class UAVTaskManager:
 
         result = subprocess.run(
             [sys.executable, 'test.py'] + test_args,
-            cwd=os.path.dirname(os.path.abspath(__file__)),
+            cwd=os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'obstacle_2d_minimal'),
             capture_output=True,
             text=True,
             timeout=self.config.execution_timeout
