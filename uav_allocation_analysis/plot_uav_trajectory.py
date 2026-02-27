@@ -106,6 +106,8 @@ def plot_uav_trajectories(uav_trajectories, task_positions=None, save_path='uav_
                   fontsize=14)
     ax.grid(True, alpha=0.3, zorder=1)
     ax.legend(loc='upper right', fontsize=8, ncol=2)
+    # 设置x和y轴使用相同的刻度（等比例）
+    ax.set_aspect('equal')
 
     plt.tight_layout()
     plt.savefig(save_path, dpi=150, bbox_inches='tight')
@@ -154,6 +156,8 @@ def plot_time_step_final(data, step_idx=900, save_path='uav_positions_step900.pn
     ax.set_xlim(0, 300)
     ax.set_ylim(0, 300)
     ax.grid(True, alpha=0.3)
+    # 设置x和y轴使用相同的刻度（等比例）
+    ax.set_aspect('equal')
     ax.legend(loc='upper right', fontsize=7, ncol=2)
 
     plt.tight_layout()
@@ -188,6 +192,7 @@ def plot_time_sequence_grid(data, steps=[1, 300, 600, 900],
             col = idx % 3
             ax = axes[row, col]
         ax.set_title(f'Time Step {step}', fontsize=11)
+        ax.set_aspect('equal')  # 等比例坐标轴
 
         positions_data = {}
         for uav_id, uav_data in data['uavs'].items():
