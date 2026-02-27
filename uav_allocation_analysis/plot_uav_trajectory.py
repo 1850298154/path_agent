@@ -21,6 +21,27 @@ def generate_rainbow_colors(n):
     return colors
 
 
+def generate_task_colors():
+    """生成任务类型颜色（透明度更高）"""
+    return {
+        'surveillance': (1.0, 0.84, 0.44, 0.4),  # 金色 - 高透明
+        'attack': (1.0, 0.42, 0.71, 0.4),      # 浅红 - 高透明
+        'capture': (0.30, 0.80, 0.55, 0.4),      # 青色 - 高透明
+    }
+
+
+def load_task_data(filepath='precomputed_data.json'):
+    """加载任务数据"""
+    with open(filepath, 'r', encoding='utf-8') as f:
+        return json.load(f)
+
+
+def get_task_type(task_id, task_positions):
+    """获取任务类型（简化逻辑，所有任务视为侦察）"""
+    # 简化处理：所有任务都使用侦察颜色
+    return 'surveillance'
+
+
 def load_uav_data(filepath='uav_positions_over_time.json'):
     """加载UAV位置数据"""
     with open(filepath, 'r', encoding='utf-8') as f:
@@ -39,14 +60,29 @@ def extract_trajectories(data):
     return uav_trajectories
 
 
-def plot_uav_trajectories(uav_trajectories, save_path='uav_trajectories_full.png'):
-    """绘制所有UAV的完整轨迹"""
+def plot_uav_trajectories(uav_trajectories, task_positions=None, save_path='uav_trajectories_full.png'):
+    """绘制所有UAV的完整轨迹和任务位置"""
     n_uavs = len(uav_trajectories)
-    colors = generate_rainbow_colors(n_uavs)
+    uav_colors = generate_rainbow_colors(n_uavs)
+    task_colors = generate_task_colors()
 
     fig, ax = plt.subplots(figsize=(20, 20))
 
-    # 绘制每个UAV的轨迹
+    # 先绘制任务位置（底层，高透明度）
+    if task_positions:
+        for task_id, pos in task_positions.items():
+            # 限制最多绘制30个任务，避免过于拥挤
+            if str(task_id) in task_positions:
+                task_type = get_task_type(task_id, task_positions)
+                task_color = task_colors[task_type]
+                # 绘制任务位置圈（高透明）
+                task_circle = patches.Circle((pos[0], pos[1]), 3.5,
+                                         facecolor=task_color, edgecolor='black',
+                                         linewidth=1.0, alpha=0.4,
+                                         label=f'Task {task_id}')
+                ax.add_patch(task_circle)
+
+    # 绘制每个UAV的轨迹（上层，低透明度）
     for i, (uav_id, positions) in enumerate(uav_trajectories.items()):
         if len(positions) < 2:
             continue
@@ -54,20 +90,21 @@ def plot_uav_trajectories(uav_trajectories, save_path='uav_trajectories_full.png
         pos_array = np.array(positions)
         # 绘制轨迹线
         ax.plot(pos_array[:, 0], pos_array[:, 1],
-                color=colors[i], linewidth=0.5, alpha=0.6, label=f'UAV {uav_id}')
+                color=uav_colors[i], linewidth=0.8, alpha=0.7, label=f'UAV {uav_id}')
 
         # 绘制起点
         ax.plot(positions[0][0], positions[0][1], 'o',
-                color=colors[i], markersize=3, alpha=0.8)
+                color=uav_colors[i], markersize=4, alpha=0.9, zorder=3)
 
         # 绘制终点
         ax.plot(positions[-1][0], positions[-1][1], 's',
-                color=colors[i], markersize=5, alpha=1.0)
+                color=uav_colors[i], markersize=6, alpha=1.0, zorder=3)
 
     ax.set_xlabel('X Position (m)', fontsize=12)
     ax.set_ylabel('Y Position (m)', fontsize=12)
-    ax.set_title(f'UAV Trajectories (900 Time Steps, {n_uavs} UAVs)', fontsize=14)
-    ax.grid(True, alpha=0.3)
+    ax.set_title(f'UAV Trajectories with Task Locations ({n_uavs} UAVs, {len(task_positions) if task_positions else 0} Tasks)',
+                  fontsize=14)
+    ax.grid(True, alpha=0.3, zorder=1)
     ax.legend(loc='upper right', fontsize=8, ncol=2)
 
     plt.tight_layout()
@@ -185,29 +222,39 @@ def main():
     print("UAV轨迹可视化工具")
     print("=" * 60)
 
-    # 加载数据
-    data = load_uav_data()
-    print(f"数据来源: uav_positions_over_time.json")
-    print(f"总UAV数: {len(data['uavs'])}")
-    print(f"总时间步: {len(data['uavs']['0']['positions'])}")
-    print(f"总时间: {data['makespan']:.1f}s")
+    # 加载UAV位置数据
+    uav_data = load_uav_data()
+    print(f"UAV数据来源: uav_positions_over_time.json")
+    print(f"总UAV数: {len(uav_data['uavs'])}")
+    print(f"总时间步: {len(uav_data['uavs']['0']['positions'])}")
+    print(f"总时间: {uav_data['makespan']:.1f}s")
     print()
 
+    # 加载任务数据
+    try:
+        task_data = load_task_data('precomputed_data.json')
+        task_positions = task_data.get('task_positions', {})
+        print(f"任务数据来源: precomputed_data.json")
+        print(f"总任务数: {len(task_positions)}")
+    except FileNotFoundError:
+        task_positions = None
+        print("警告: 未找到任务数据文件 precomputed_data.json")
+
     # 提取轨迹
-    uav_trajectories = extract_trajectories(data)
+    uav_trajectories = extract_trajectories(uav_data)
     print(f"提取轨迹完成，共 {len(uav_trajectories)} 个UAV")
 
     # 绘制完整轨迹图
-    print("\n[1/3] 绘制完整轨迹图...")
-    plot_uav_trajectories(uav_trajectories, 'uav_trajectories_full.png')
+    print("\n[1/3] 绘制完整轨迹图（含任务位置）...")
+    plot_uav_trajectories(uav_trajectories, task_positions, 'uav_trajectories_full.png')
 
     # 绘制最后时刻的位置图
     print("[2/3] 绘制第900步位置图...")
-    plot_time_step_final(data, step_idx=900, save_path='uav_positions_step900.png')
+    plot_time_step_final(uav_data, step_idx=900, save_path='uav_positions_step900.png')
 
     # 绘制时间序列网格
     print("[3/3] 绘制时间序列网格...")
-    plot_time_sequence_grid(data, steps=[1, 100, 200, 300, 450, 600, 750, 900],
+    plot_time_sequence_grid(uav_data, steps=[1, 100, 200, 300, 450, 600, 750, 900],
                            save_path='uav_positions_grid.png')
 
     print("\n" + "=" * 60)
