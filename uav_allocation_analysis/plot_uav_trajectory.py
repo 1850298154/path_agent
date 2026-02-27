@@ -166,17 +166,17 @@ def plot_time_step_final(data, step_idx=900, save_path='uav_positions_step900.pn
     print(f"时间步{step_idx}位置图已保存到: {save_path}")
 
 
-def plot_time_sequence_grid(data, steps=[1, 300, 600, 900],
+def plot_time_sequence_grid(data, steps=[1, 100, 200, 300, 450, 600, 750, 900],
                              save_path='uav_positions_grid.png'):
     """绘制多个时间步的网格视图"""
     n_steps = len(steps)
     # 根据步数动态调整子图布局
     if n_steps <= 4:
-        fig, axes = plt.subplots(2, 2, figsize=(18, 16))
+        fig, axes = plt.subplots(2, 2, figsize=(18, 16), sharex=True, sharey=True)
     elif n_steps <= 6:
-        fig, axes = plt.subplots(2, 3, figsize=(18, 16))
+        fig, axes = plt.subplots(2, 3, figsize=(18, 16), sharex=True, sharey=True)
     else:
-        fig, axes = plt.subplots(3, 3, figsize=(18, 16))
+        fig, axes = plt.subplots(3, 3, figsize=(18, 16), sharex=True, sharey=True)
 
     n_uavs = len(data['uavs'])
     colors = generate_rainbow_colors(n_uavs)
@@ -250,17 +250,12 @@ def main():
     print(f"提取轨迹完成，共 {len(uav_trajectories)} 个UAV")
 
     # 绘制完整轨迹图
-    print("\n[1/3] 绘制完整轨迹图（含任务位置）...")
+    print("\n[1/2] 绘制完整轨迹图（含任务位置）...")
     plot_uav_trajectories(uav_trajectories, task_positions, 'uav_trajectories_full.png')
 
     # 绘制最后时刻的位置图
     print("[2/3] 绘制第900步位置图...")
     plot_time_step_final(uav_data, step_idx=900, save_path='uav_positions_step900.png')
-
-    # 绘制时间序列网格
-    print("[3/3] 绘制时间序列网格...")
-    plot_time_sequence_grid(uav_data, steps=[1, 100, 200, 300, 450, 600, 750, 900],
-                           save_path='uav_positions_grid.png')
 
     print("\n" + "=" * 60)
     print("所有图像生成完成！")
