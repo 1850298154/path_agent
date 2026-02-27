@@ -680,6 +680,7 @@ def convert(read_parameters, parameters):
         'zr.ob_rate': read_parameters['ob.rate'],
         'zr.lower_limit_Square_side_length': read_parameters['ob.lower_limit_Square_side_length'],
         'zr.upper_limit_Square_side_length': read_parameters['ob.upper_limit_Square_side_length'],
+        'obstacle_list': read_parameters['obstacle_list'] if 'obstacle_list' in read_parameters else [],
         
         'zr.more_inflated_size': read_parameters['bug.upper_limit_inflated_size'],
         'bug.inflated_size': read_parameters['bug.lower_limit_inflated_size'],

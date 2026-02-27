@@ -352,7 +352,9 @@ import shared_util.io_filename as iof
 import shared_util.sys_argument as ag
 description = iof.DIOM(ag.get_datetime()).load()
 # 障碍物、智能体起点、智能体终点
-obstacles = description['obstacle_list']  # 存储障碍物的列表
+# 优先使用YAML参数中的障碍物，如果YAML中有定义的话
+import zyaml as zy
+obstacles = zy.parameters.get('obstacle_list', description['obstacle_list'])  # 存储障碍物的列表
 # extend_obstacles = []  # 存储障碍物的列表
 agents_starts = description['agent_start_list']  # 存储agent的列表
 agents_ends = description['agent_end_list']  # 存储agents_ends的列表
