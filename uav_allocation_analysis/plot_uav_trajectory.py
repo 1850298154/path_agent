@@ -221,6 +221,57 @@ def plot_time_sequence_grid(data, steps=[1, 100, 200, 300, 450, 600, 750, 900],
     print(f"时间序列网格图已保存到: {save_path}")
 
 
+def plot_time_steps(uav_data, steps_to_plot=None, output_dir='time_steps'):
+    """绘制多个时间步的图片"""
+    import os
+    os.makedirs(output_dir, exist_ok=True)
+
+    if steps_to_plot is None:
+        steps_to_plot = [5, 10, 15, 20, 30, 45, 60, 75, 90, 100, 150, 200, 250, 300]
+
+    n_uavs = len(uav_data['uavs'])
+    colors = generate_rainbow_colors(n_uavs)
+
+    for step in steps_to_plot:
+        if step > len(uav_data['uavs']['0']['positions']):
+            print(f"警告: 时间步 {step} 超出范围，跳过")
+            continue
+
+        output_path = os.path.join(output_dir, f'step_{step:03d}.png')
+        fig, ax = plt.subplots(figsize=(20, 20))
+
+        # 获取当前时间步的所有UAV位置
+        positions_data = {}
+        for uav_id, uav_info in uav_data['uavs'].items():
+            positions = uav_info['positions']
+            if step <= len(positions):
+                positions_data[uav_id] = positions[step - 1] if step > 0 else uav_info['init_pos']
+            else:
+                positions_data[uav_id] = positions[-1] if positions else uav_info['init_pos']
+
+        # 绘制每个UAV当前位置（实心圆圈）
+        for i, (uav_id, pos) in enumerate(positions_data.items()):
+            circle = patches.Circle((pos[0], pos[1]), 2.0,
+                                  facecolor=colors[i], edgecolor='black',
+                                  linewidth=0.5, alpha=0.9,
+                                  label=f'UAV {uav_id}')
+            ax.add_patch(circle)
+
+        ax.set_xlabel('X Position (m)', fontsize=12)
+        ax.set_ylabel('Y Position (m)', fontsize=12)
+        ax.set_title(f'UAV Positions at Time Step {step} (t={step * 1.0:.1f}s)',
+                    fontsize=14)
+        ax.set_xlim(0, 300)
+        ax.set_ylim(0, 300)
+        ax.grid(True, alpha=0.3)
+        ax.set_aspect('equal')
+
+        plt.tight_layout()
+        plt.savefig(output_path, dpi=150, bbox_inches='tight')
+        plt.close()
+        print(f"已保存: {output_path}")
+
+
 def main():
     """主函数"""
     print("=" * 60)
@@ -264,3 +315,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+
