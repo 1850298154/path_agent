@@ -665,7 +665,7 @@ def produce_test_data_set():
 ############################################################
 def convert(read_parameters, parameters):
     parameters = {
-        'avoid.m': 10,
+        'avoid.m': read_parameters.get('avoid.m', 10),
         'buffer': 0.03,
         
         'Num': read_parameters['agent.Num'],
