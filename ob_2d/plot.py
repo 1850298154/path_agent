@@ -206,6 +206,7 @@ def plot_pre_traj(agent_list, obstacle_list, show, episodes):
 
         plt.xlim(SET.plot_range['x'])
         plt.ylim(SET.plot_range['y'])
+        axes.set_aspect('equal')
         # plt.show()
         filename = of.path_dir+'savefig/episode-'+str(episodes)+SET.format
         of.create_file(filename)
@@ -415,10 +416,13 @@ def plot_all_pre_traj(agent_list, ini_obstacle_list, obstacle_list, show, episod
         plot_obstacle(obstacle_list)
         axes.set_ylabel('Y', fontdict={'size': 10, 'color': 'red'})
         axes.set_xlabel('X', fontdict={'size': 10, 'color': 'red'})
-        axes.set_aspect('equal')
 
+        # 先设置坐标轴范围
         plt.xlim(SET.plot_range['x'])
         plt.ylim(SET.plot_range['y'])
+
+        # 再设置等比例（在 xlim/ylim 之后）
+        axes.set_aspect('equal')
         # plt.show()
         # filename = of.path_dir+'savefig/episode-'+str(episodes)+SET.format
         filename = of.path_dir+'savefig/episode-'+str(step)+SET.format
@@ -499,6 +503,7 @@ def plot_position(agent_list, ini_obstacle_list, obstacle_list):
 
     plt.xlim(SET.plot_range['x'])
     plt.ylim(SET.plot_range['y'])
+    axes.set_aspect('equal')
 
     filename = of.path_dir+'savefig/trajecotry'+SET.format
     of.create_file(filename)
@@ -549,6 +554,9 @@ def plot_path_planning(agent_list):
                 plt.plot(agent.path[:, 0], agent.path[:, 1], c=color[i])
                 plt.xlim(SET.plot_range['x'])
                 plt.ylim(SET.plot_range['y'])
+                axes.set_aspect('equal')
+
+            plt.scatter(agent.terminal_p[0], agent.terminal_p[1],
 
             plt.scatter(agent.terminal_p[0], agent.terminal_p[1],
                         marker='o', s=40, zorder=2, edgecolor='k', color=color[i])
@@ -587,6 +595,7 @@ def plot_circle(obstacle_list, connection_constraint_list, episodes):
 
     plt.xlim(SET.plot_range['x'])
     plt.ylim(SET.plot_range['y'])
+    axes.set_aspect('equal')
     # plt.show()
     filename = of.path_dir+'savefig/e'+str(episodes)+SET.format
     of.create_file(filename)
