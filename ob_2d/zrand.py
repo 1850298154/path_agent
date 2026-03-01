@@ -93,6 +93,10 @@ obstacles = []  # 存储障碍物的列表
 agents_starts = []  # 存储agent的列表
 agents_ends = []  # 存储agents_ends的列表
 
+# UAV 动态目标相关
+uav_positions = []  # 存储每个UAV的目标位置序列
+uav_data_time_step = 1.0  # UAV数据的时间间隔(秒)
+
 
 ############################################################
 ############     app.py 初始化障碍物(膨胀后)不能重合    ######
@@ -364,6 +368,22 @@ obstacles = description['obstacle_list']  # 存储障碍物的列表
 # extend_obstacles = []  # 存储障碍物的列表
 agents_starts = description['agent_start_list']  # 存储agent的列表
 agents_ends = description['agent_end_list']  # 存储agents_ends的列表
+
+# 加载UAV动态目标序列数据
+try:
+    import json
+    with open('data/02_processed_data/uav_positions_transformed.json', 'r', encoding='utf-8') as f:
+        uav_raw_data = json.load(f)
+    uav_data_time_step = uav_raw_data['time_step']
+    # 为每个UAV构建目标位置序列（positions数组）
+    uavs_data = uav_raw_data['uavs']
+    for uav_id in sorted(uavs_data.keys(), key=int):
+        uav_positions.append(uavs_data[uav_id]['positions'])
+    print(f'加载UAV动态目标数据: 时间间隔={uav_data_time_step}秒, UAV数量={len(uav_positions)}')
+except Exception as e:
+    print(f'警告: 无法加载UAV动态目标数据: {e}')
+    uav_data_time_step = 1.0
+    uav_positions = []
 
 # 如果没有从文件加载到数据，生成默认值
 if not agents_starts:

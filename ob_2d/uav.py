@@ -109,6 +109,8 @@ class uav2D():
 
         # terminal position
         self.terminal_p = self.p.copy()
+        # 目标索引（用于动态目标更新）
+        self.target_index = 0
 
         if type == 'Obstacle-transitor' or type == 'Searcher':
             print(' bug.path_plan(', flush=True)

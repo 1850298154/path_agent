@@ -27,6 +27,9 @@ sys.path.append(os.getcwd())
 # import      forest_SET  as      SET
 
 global agent_list
+global current_step  # 当前仿真步数
+
+current_step = 0
 
 
 def initialize():
@@ -140,8 +143,11 @@ def main():
 
         start = time.time()
 
-        # run one step
-        agent_list = run_one_step(agent_list, SET.obstacle_list)
+        # run one step with current step number
+        agent_list = run_one_step(agent_list, SET.obstacle_list, current_step)
+
+        # increment step counter
+        current_step += 1
 
         time_interval = time.time()-start
 

@@ -27,6 +27,9 @@ fallback_agent_index_list = []  # 递归判断，是否之前的状态需要回�
 glo_agent_list = []
 stop_multi = 2
 
+# 动态目标点跟踪
+current_step = 0  # 当前仿真步数
+
 def check_one_step(agent_list, obstacle_list, share_data):
     reverse = fallback_agent_index_list[::-1]  # 原来从小号到大号，现在从大到小
     # for max_collide_agent_index in reverse:
@@ -124,7 +127,7 @@ def check_one_step(agent_list, obstacle_list, share_data):
 
 
 # this is the main loop
-def run_one_step(agent_list, obstacle_list):
+def run_one_step(agent_list, obstacle_list, step):
     global glo_agent_list
     glo_agent_list = agent_list
     start = time.time()
@@ -151,7 +154,7 @@ def run_one_step(agent_list, obstacle_list):
 
         # 为了后面的 elif SET.compute_model == 'norm':
         items.append([(agent_list[i]), (share_data), (obstacle_list),
-                      SET.REALFLY, SET.next_interval])
+                      SET.REALFLY, SET.next_interval, step])
         # items.append([(agent_list[i]), (share_data),  copy.deepcopy(obstacle_list),
         #               SET.REALFLY, SET.next_interval])
     if SET.compute_model == 'thread':
@@ -222,6 +225,29 @@ def run_one_agent(item):
     obstacle_list = item[2]
     REALFLY = item[3]
     next_interval = item[4]
+    step = item[5]  # 当前步数
+
+    # ========== 动态目标点更新 ==========
+    import zrand as zr
+    # 计算当前仿真时间（秒）
+    current_time = step * SET.h
+
+    # 计算下一个目标时刻
+    next_target_time = (agent.target_index + 1) * zr.uav_data_time_step
+
+    # 如果当前时间超过或达到下一个目标时刻，更新目标点
+    if current_time >= next_target_time and len(zr.uav_positions) > 0:
+        # 找到对应的目标位置索引
+        target_idx = int(current_time / zr.uav_data_time_step)
+        if target_idx < len(zr.uav_positions[agent.index]):
+            new_target = zr.uav_positions[agent.index][target_idx]
+            # 更新目标点
+            agent.target = np.array(new_target)
+            agent.target_index = target_idx
+            # 重新规划长路径
+            agent.get_new_target(agent.target)
+            print(f'Agent {agent.index}: 目标更新到 {new_target}, 步数={step}, 时间={current_time:.2f}s')
+    # ==========================================
 
     # get inter robot avoidance constraints
     agent.inter_cons_A, agent.inter_cons_B, agent.inter_cons_C, agent.Rho_ij = Get_inter_cons(
