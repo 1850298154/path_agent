@@ -107,6 +107,7 @@ def intermediate_logs(agent_list):
 
 
 def main():
+    global current_step  # 声明使用全局变量
 
     # buld the file that saving the data and figure
     if os.path.exists('savefig'):
