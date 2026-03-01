@@ -372,7 +372,11 @@ agents_ends = description['agent_end_list']  # 存储agents_ends的列表
 # 加载UAV动态目标序列数据
 try:
     import json
-    with open('data/02_processed_data/uav_positions_transformed.json', 'r', encoding='utf-8') as f:
+    import os
+    # 获取 ob_2d 的上级目录
+    parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    data_file = os.path.join(parent_dir, 'data/02_processed_data/uav_positions_transformed.json')
+    with open(data_file, 'r', encoding='utf-8') as f:
         uav_raw_data = json.load(f)
     uav_data_time_step = uav_raw_data['time_step']
     # 为每个UAV构建目标位置序列（positions数组）
