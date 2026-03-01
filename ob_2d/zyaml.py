@@ -676,6 +676,8 @@ def convert(read_parameters, parameters):
         
         'zr.set_xlim': read_parameters['map.set_xlim'],
         'zr.set_ylim': read_parameters['map.set_ylim'],
+        'map.set_xlim_min': read_parameters.get('map.set_xlim_min', 0),
+        'map.set_ylim_min': read_parameters.get('map.set_ylim_min', 0),
 
         'zr.ob_num': read_parameters['ob.num'],
         'zr.ob_rate': read_parameters['ob.rate'],
