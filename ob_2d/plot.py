@@ -557,8 +557,6 @@ def plot_path_planning(agent_list):
                 axes.set_aspect('equal')
 
             plt.scatter(agent.terminal_p[0], agent.terminal_p[1],
-
-            plt.scatter(agent.terminal_p[0], agent.terminal_p[1],
                         marker='o', s=40, zorder=2, edgecolor='k', color=color[i])
                         # marker='o', s=400, zorder=2, edgecolor='k', color=color[i])
             plt.scatter(agent.target[0], agent.target[1], marker='d',

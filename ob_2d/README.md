@@ -61,10 +61,7 @@ uv sync
 ```bash
 cd D:\zyt\git_ln\path_agent\ob_2d
 
-# 最简单的运行（使用默认参数）
-uv run python test.py
-
-# 带参数运行
+# 必须带参数运行
 uv run python test.py 2026-03-01_12-00-00 004/2026-03-01_12-00-00/parameters.yaml show_pict
 ```
 
