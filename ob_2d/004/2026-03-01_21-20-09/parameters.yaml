@@ -1,8 +1,8 @@
 agent.Num: 80
-agent.Umax: 10.0
-agent.Vmax: 4.6000000000000005
+agent.Umax: 150.0
+agent.Vmax: 15
 agent.physical_radius: 0.25
-agent.radius: 0.5
+agent.radius: 0.75
 bug.bug_step_size: 20
 bug.lower_limit_inflated_size: 9.0
 bug.num_tracks: 4
@@ -20,8 +20,8 @@ mpc.K: -1
 mpc.epsilon: -1
 mpc.max_episode: 10
 mpc.k: 8
-mpc.h: 0.15
-avoid.m: 10
+mpc.h: 0.1
+avoid.m: 6
 ob.apart_num: 2
 ob.lower_limit_Square_side_length: 45.405712670140126
 ob.num: 1

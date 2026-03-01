@@ -248,6 +248,8 @@ def run_one_agent(item):
             # 重新规划长路径
             agent.get_new_target(agent.target)
             print(f'Agent {agent.index}: 目标更新到 {new_target}, 步数={step}, 时间={current_time:.2f}s = {step}step * {SET.h}h * {scale_factor}scale_factor')
+        else:
+            print(f'Agent {agent.index}: 已经达到最后一个目标点，无法更新目标, 步数={step}, 时间={current_time:.2f}s = {step}step * {SET.h}h * {scale_factor}scale_factor')
     # ==========================================
 
     # get inter robot avoidance constraints
