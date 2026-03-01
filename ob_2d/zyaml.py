@@ -98,6 +98,8 @@ physical_radius=0.3
 parameters = {
     'zr.set_xlim': temp_set_xlim,
     'zr.set_ylim': temp_set_xlim,
+    'map.set_xlim_min': 0,      # X 轴最小值
+    'map.set_ylim_min': 0,      # Y 轴最小值
     'avoid.m': 10,
     # 'avoid.m': 1,
     # 'avoid.m': 3,

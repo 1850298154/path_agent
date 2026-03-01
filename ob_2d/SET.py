@@ -54,8 +54,8 @@ def initialize_set():
     core_num = 1
     global map_range
     # map_range={'x':[-0.5,10.5],'y':[-0.5,10.5]}
-    map_range = {'x': [-zr.radius, zr.set_xlim+zr.radius],
-                 'y': [-zr.radius, zr.set_ylim+zr.radius]}
+    map_range = {'x': [zy.parameters['map.set_xlim_min'], zy.parameters['zr.set_xlim']],
+                 'y': [zy.parameters['map.set_ylim_min'], zy.parameters['zr.set_ylim']]}
 
     ## parameter for real fly ##
 

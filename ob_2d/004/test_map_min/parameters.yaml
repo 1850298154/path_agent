@@ -7,14 +7,12 @@ bug.bug_step_size: 20
 bug.lower_limit_inflated_size: 9.0
 bug.num_tracks: 4
 bug.upper_limit_inflated_size: 14.0
-map.set_xlim_min: -5
-map.set_ylim_min: 0
 map.set_xlim: 40
 map.set_ylim: 30
-map.set_zlim: 330
+map.set_xlim_min: -5
+map.set_ylim_min: 0
 model.SpaceEnvironmentModel.dimension: 2
 model.SpaceEnvironmentModel.withObstacles: true
-model.TypicalScene.id: Random
 model.UnmannedSystem.id: unmanned_vehicle
 mpc.K: -1
 mpc.epsilon: -1

@@ -415,6 +415,7 @@ def plot_all_pre_traj(agent_list, ini_obstacle_list, obstacle_list, show, episod
         plot_obstacle(obstacle_list)
         axes.set_ylabel('Y', fontdict={'size': 10, 'color': 'red'})
         axes.set_xlabel('X', fontdict={'size': 10, 'color': 'red'})
+        axes.set_aspect('equal')
 
         plt.xlim(SET.plot_range['x'])
         plt.ylim(SET.plot_range['y'])
