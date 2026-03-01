@@ -119,8 +119,9 @@ def plot_grid_positions(positions_list, centers=None, radius=1.0, title="网格�
     if save_path:
         plt.savefig(save_path, dpi=300, bbox_inches='tight')
         print(f"图片已保存: {save_path}")
-
-    plt.show()
+        plt.close()  # 关闭图形，不显示
+    else:
+        plt.show()
 
 
 def calculate_grid_info(num_agents, radius=1.0):
