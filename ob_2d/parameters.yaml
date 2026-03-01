@@ -2,6 +2,8 @@ Num: 3
 Umax: 8
 Vmax: 6
 avoid.m: 10
+mpc.k: 8
+mpc.h: 0.15
 buffer: 0.03
 bug.bug_step_size: 0.5
 bug.inflated_size: 7.199999999999999

@@ -666,8 +666,10 @@ def produce_test_data_set():
 def convert(read_parameters, parameters):
     parameters = {
         'avoid.m': read_parameters.get('avoid.m', 10),
+        'mpc.k': read_parameters.get('mpc.k', 8),
+        'mpc.h': read_parameters.get('mpc.h', 0.15),
         'buffer': 0.03,
-        
+
         'Num': read_parameters['agent.Num'],
         'Vmax': read_parameters['agent.Vmax'],
         'Umax': read_parameters['agent.Umax'],

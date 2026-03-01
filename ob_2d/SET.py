@@ -38,10 +38,10 @@ def initialize_set():
 
     global K       # the length of horizon
     # K = 2
-    K = 8
+    K = zy.parameters['mpc.k']
     # K = 9
     global h       # time step
-    h = 0.15
+    h = zy.parameters['mpc.h']
     global episodes      # the maximum times for replanning
     # episodes=70
     episodes = zr.episodes
