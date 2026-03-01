@@ -1,0 +1,5 @@
+success_rate: 1.0
+collision_rate: 0.0
+average_planning_time: 0.079424
+ex_collision_rate: 0.0
+deadlock_crack_rate: 1.0

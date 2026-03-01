@@ -1,0 +1,41 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "OB_2D - 默认运行",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/ob_2d/test.py",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "args": []
+        },
+        {
+            "name": "OB_2D - 显示图形",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/ob_2d/test.py",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "args": [
+                "show_pict"
+            ]
+        },
+        {
+            "name": "OB_2D - 指定参数",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${workspaceFolder}/ob_2d/test.py",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "args": [
+                "2026-03-01_12-00-00",
+                "ob_2d/004/2026-03-01_12-00-00/parameters.yaml",
+                "show_pict"
+            ]
+        }
+    ]
+}
