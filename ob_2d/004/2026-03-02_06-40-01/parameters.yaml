@@ -18,7 +18,7 @@ model.TypicalScene.id: Random
 model.UnmannedSystem.id: unmanned_vehicle
 mpc.K: -1
 mpc.epsilon: -1
-mpc.max_episode: 3
+mpc.max_episode: 900
 mpc.k: 6
 mpc.h: 0.05
 avoid.m: 6
