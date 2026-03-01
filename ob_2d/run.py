@@ -230,7 +230,8 @@ def run_one_agent(item):
     # ========== 动态目标点更新 ==========
     import zrand as zr
     # 计算当前仿真时间（秒）
-    current_time = step * SET.h
+    scale_factor = 10  # 时间缩放因子，根据实际情况调整
+    current_time = step * SET.h * scale_factor  # 当前时间 = 步数 * 时间步长 * 缩放因子
 
     # 计算下一个目标时刻
     next_target_time = (agent.target_index + 1) * zr.uav_data_time_step
@@ -246,7 +247,7 @@ def run_one_agent(item):
             agent.target_index = target_idx
             # 重新规划长路径
             agent.get_new_target(agent.target)
-            print(f'Agent {agent.index}: 目标更新到 {new_target}, 步数={step}, 时间={current_time:.2f}s')
+            print(f'Agent {agent.index}: 目标更新到 {new_target}, 步数={step}, 时间={current_time:.2f}s = {step}step * {SET.h}h * {scale_factor}scale_factor')
     # ==========================================
 
     # get inter robot avoidance constraints
