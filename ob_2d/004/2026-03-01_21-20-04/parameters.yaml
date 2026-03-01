@@ -2,7 +2,7 @@ agent.Num: 2
 agent.Umax: 10.0
 agent.Vmax: 4.6000000000000005
 agent.physical_radius: 0.25
-agent.radius: 1.0
+agent.radius: 0.5
 bug.bug_step_size: 20
 bug.lower_limit_inflated_size: 9.0
 bug.num_tracks: 4
