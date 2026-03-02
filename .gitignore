@@ -208,3 +208,11 @@ __marimo__/
 
 *ignore/
 *ignore
+
+# Project-specific ignores
+# Large temporary output files
+*.output
+**/print/
+
+# Large agent list pickle files (temporary data)
+**/agent_list_100.pkl
