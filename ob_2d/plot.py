@@ -601,3 +601,125 @@ def plot_circle(obstacle_list, connection_constraint_list, episodes):
     plt.close()
 
     return None
+
+
+def plot_position_with_tasks(agent_list, ini_obstacle_list, obstacle_list,
+                            task_list=None, task_data_path='data/01_original_data/precomputed_data.json'):
+    """
+    绘制智能体轨迹并显示任务圆球
+
+    参数:
+        agent_list: 智能体列表
+        ini_obstacle_list: 初始障碍物列表
+        obstacle_list: 障碍物列表
+        task_list: 任务列表（可选，如不提供则从 task_data_path 加载）
+        task_data_path: 任务数据文件路径
+
+    参考:
+        - plot_position(): 原有的轨迹绘制函数
+        - plot_uav_trajectory.py: 任务圆球绘制方式
+    """
+    import json
+    import os
+
+    # 加载任务数据
+    if task_list is None:
+        try:
+            # 从项目根目录路径加载
+            task_data_path_abs = os.path.abspath(os.path.join(os.getcwd(), '..', task_data_path))
+            if not os.path.exists(task_data_path_abs):
+                task_data_path_abs = os.path.abspath(os.path.join(os.getcwd(), task_data_path))
+
+            with open(task_data_path_abs, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                task_list = data.get('task_list', [])
+        except FileNotFoundError:
+            print(f"警告: 未找到任务数据文件 {task_data_path}，不绘制任务圆球")
+            task_list = []
+
+    # 任务类型颜色映射（高透明度）
+    task_type_colors = {
+        'surveillance': (1.0, 0.84, 0.44, 0.4),  # 金色 - 高透明
+        'attack': (1.0, 0.42, 0.71, 0.4),        # 浅红 - 高透明
+        'capture': (0.30, 0.80, 0.55, 0.4),      # 青色 - 高透明
+    }
+
+    # 创建图形
+    fig = plt.figure(figsize=(10, 10))
+    axes = fig.subplots(1, 1)
+
+    # 生成等间隔刻度的列表
+    num_ticks = 51
+    x_ticks = np.linspace(0, zr.set_xlim, num_ticks)
+    y_ticks = np.linspace(0, zr.set_ylim, num_ticks)
+    # 将数字刻度垂直显示
+    axes.tick_params(axis='x', labelrotation=90)
+    # 设置x轴刻度
+    plt.xticks(x_ticks)
+    plt.yticks(y_ticks)
+    axes.set_ylabel('Y', fontdict={'size': 10, 'color': 'red'})
+    axes.set_xlabel('X', fontdict={'size': 10, 'color': 'red'})
+
+    # 先绘制任务圆球（底层，高透明度）
+    if task_list:
+        for task in task_list:
+            task_center = task.get('center')
+            task_radius = task.get('radius')
+            task_type = task.get('type', 'surveillance')
+            task_id = task.get('task_id', 0)
+
+            if task_center and task_radius:
+                # 获取任务颜色
+                task_color = task_type_colors.get(task_type, (0.5, 0.5, 0.5, 0.4))
+
+                # 绘制任务圆球（高透明度）
+                task_circle = Circle(
+                    (task_center[0], task_center[1]),
+                    task_radius,
+                    facecolor=task_color,
+                    edgecolor='black',
+                    linewidth=1.0,
+                    alpha=task_color[3],  # 使用预定义的透明度
+                    zorder=0,  # 底层
+                )
+                axes.add_patch(task_circle)
+
+    # 绘制每个智能体的轨迹
+    for i in range(SET.Num):
+        if agent_list[i].type == "Anchor":
+            continue
+
+        # 起点（方形，半透明）
+        plt.scatter(agent_list[i].position[0][0],
+                    agent_list[i].position[0][1],
+                    marker='s', s=40, zorder=1, edgecolor='k', color=color[i],
+                    alpha=0.5)
+
+        # 终点（菱形，半透明）
+        plt.scatter(agent_list[i].target[0],
+                    agent_list[i].target[1],
+                    marker='d', s=40, zorder=3, edgecolor='k', color=color[i],
+                    alpha=0.5)
+
+        # 轨迹线
+        plt.plot(agent_list[i].position[:, 0],
+                agent_list[i].position[:, 1],
+                zorder=2, c=color[i], linewidth=4)
+
+    # 绘制障碍物
+    plot_obstacle(ini_obstacle_list)
+    plot_obstacle(obstacle_list)
+
+    # 设置坐标轴范围
+    plt.xlim(SET.plot_range['x'])
+    plt.ylim(SET.plot_range['y'])
+    axes.set_aspect('equal')
+
+    # 保存图片
+    filename = of.path_dir + 'savefig/trajecotry_with_tasks' + SET.format
+    of.create_file(filename)
+    plt.savefig(filename, bbox_inches='tight')
+    # plt.show()
+    plt.close()
+
+    print(f"已绘制轨迹和任务圆球，保存到: {filename}")

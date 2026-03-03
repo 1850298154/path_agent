@@ -4,7 +4,7 @@ print('设置编码为utf8...')
 
 print('OB_2D  model :: test 模块初始化...') # 在导入所有【自定义】和【标准】库之后，再执行这句打印
 
-# import output_filename as of  # 暂时注释，避免 io_filename.py 初始化错误
+import output_filename as of
 import zstatistics as zs
 from plot import *
 import multiprocessing as mp
@@ -84,7 +84,10 @@ def main():
     # 画图
     print('开始画图...')
     if len(sys.argv) >= 4 and sys.argv[3] == 'show_pict':
-        plot_position(agent_list, SET.ini_obstacle_list, SET.obstacle_list)
+        # 使用带任务圆球的绘图函数
+        plot_position_with_tasks(agent_list, SET.ini_obstacle_list, SET.obstacle_list)
+        # 如果需要原来的不带任务的版本，可以取消下面这行注释
+        # plot_position(agent_list, SET.ini_obstacle_list, SET.obstacle_list)
         # episodes_path_list=plot_all_pre_traj(agent_list, SET.ini_obstacle_list, SET.obstacle_list, SET.show, -1)  # 暂时注释，先跑通 plot_position
 
     # 保存 pkl 文件（zyt 验收）暂时注释，避免 shared_util 错误
