@@ -787,7 +787,7 @@ def plot_all_pre_traj_with_dynamic_tasks(agent_list, ini_obstacle_list, obstacle
     episodes_path_list = []
     ob_rate = 2
     time_per_step = 0.5  # 每帧对应 0.5s
-
+    print(f"总帧数: {len(agent_list[0].pre_traj_list)}, 每帧时间: {time_per_step}s")
     for step in range(len(agent_list[0].pre_traj_list)):
         current_time = step * time_per_step
 

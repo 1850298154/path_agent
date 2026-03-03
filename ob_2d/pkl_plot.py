@@ -85,10 +85,10 @@ def main():
     print('开始画图...')
     if len(sys.argv) >= 4 and sys.argv[3] == 'show_pict':
         # 使用带任务圆球的绘图函数（静态显示所有任务）
-        plot_position_with_tasks(agent_list, SET.ini_obstacle_list, SET.obstacle_list)
+        # plot_position_with_tasks(agent_list, SET.ini_obstacle_list, SET.obstacle_list)
         # 使用动态任务调度绘图函数（每帧动态显示/隐藏任务）
-        # episodes_path_list = plot_all_pre_traj_with_dynamic_tasks(
-        #     agent_list, SET.ini_obstacle_list, SET.obstacle_list)
+        episodes_path_list = plot_all_pre_traj_with_dynamic_tasks(
+            agent_list, SET.ini_obstacle_list, SET.obstacle_list)
         # 如果需要原来的不带任务的版本，可以取消下面这行注释
         # plot_position(agent_list, SET.ini_obstacle_list, SET.obstacle_list)
 
