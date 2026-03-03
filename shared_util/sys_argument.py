@@ -66,13 +66,6 @@ def get_datetime():
     elif os.path.basename(sys.argv[0]) == 'zqt_model_process.py':
         print('zqt_model_process.py :: ag.get_datetime() : ', datetime)
         return datetime
-    elif os.path.basename(sys.argv[0]) == 'test.py':
-        if len(sys.argv) > 1:
-            return sys.argv[1]
-        # 如果没有参数，返回当前时间
-        import datetime
-        current_datetime = datetime.datetime.now()
-        datetime = current_datetime.strftime("%Y-%m-%d_%H-%M-%S")
-        print('test.py          :: ag.get_datetime() : ', datetime)
-        return datetime
+    else:
+        return sys.argv[1]
 
