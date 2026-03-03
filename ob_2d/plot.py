@@ -637,11 +637,11 @@ def plot_position_with_tasks(agent_list, ini_obstacle_list, obstacle_list,
             print(f"警告: 未找到任务数据文件 {task_data_path}，不绘制任务圆球")
             task_list = []
 
-    # 任务类型颜色映射（高透明度）
+    # 任务类型颜色映射（透明度0.2）
     task_type_colors = {
-        'surveillance': (1.0, 0.84, 0.44, 0.4),  # 金色 - 高透明
-        'attack': (1.0, 0.42, 0.71, 0.4),        # 浅红 - 高透明
-        'capture': (0.30, 0.80, 0.55, 0.4),      # 青色 - 高透明
+        'surveillance': (1.0, 0.84, 0.44, 0.2),  # 金色 - 透明度0.2
+        'attack': (1.0, 0.42, 0.71, 0.2),        # 浅红 - 透明度0.2
+        'capture': (0.30, 0.80, 0.55, 0.2),      # 青色 - 透明度0.2
     }
 
     # 创建图形
@@ -670,7 +670,7 @@ def plot_position_with_tasks(agent_list, ini_obstacle_list, obstacle_list,
 
             if task_center and task_radius:
                 # 获取任务颜色
-                task_color = task_type_colors.get(task_type, (0.5, 0.5, 0.5, 0.4))
+                task_color = task_type_colors.get(task_type, (0.5, 0.5, 0.5, 0.2))
 
                 # 绘制任务圆球（高透明度）
                 task_circle = Circle(
@@ -689,22 +689,22 @@ def plot_position_with_tasks(agent_list, ini_obstacle_list, obstacle_list,
         if agent_list[i].type == "Anchor":
             continue
 
-        # 起点（方形，半透明）
+        # 起点（方形，透明度0.2）
         plt.scatter(agent_list[i].position[0][0],
                     agent_list[i].position[0][1],
                     marker='s', s=40, zorder=1, edgecolor='k', color=color[i],
-                    alpha=0.5)
+                    alpha=0.2)
 
-        # 终点（菱形，半透明）
+        # 终点（菱形，透明度0.2）
         plt.scatter(agent_list[i].target[0],
                     agent_list[i].target[1],
                     marker='d', s=40, zorder=3, edgecolor='k', color=color[i],
-                    alpha=0.5)
+                    alpha=0.2)
 
-        # 轨迹线
+        # 轨迹线（透明度0.2）
         plt.plot(agent_list[i].position[:, 0],
                 agent_list[i].position[:, 1],
-                zorder=2, c=color[i], linewidth=4)
+                zorder=2, c=color[i], linewidth=4, alpha=0.2)
 
     # 绘制障碍物
     plot_obstacle(ini_obstacle_list)
