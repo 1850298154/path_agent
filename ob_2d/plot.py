@@ -693,18 +693,18 @@ def plot_position_with_tasks(agent_list, ini_obstacle_list, obstacle_list,
         plt.scatter(agent_list[i].position[0][0],
                     agent_list[i].position[0][1],
                     marker='s', s=40, zorder=1, edgecolor='k', color=color[i],
-                    alpha=0.2)
+                    alpha=0.35)
 
         # 终点（菱形，透明度0.2）
         plt.scatter(agent_list[i].target[0],
                     agent_list[i].target[1],
                     marker='d', s=40, zorder=3, edgecolor='k', color=color[i],
-                    alpha=0.2)
+                    alpha=0.35)
 
         # 轨迹线（透明度0.2）
         plt.plot(agent_list[i].position[:, 0],
                 agent_list[i].position[:, 1],
-                zorder=2, c=color[i], linewidth=4, alpha=0.2)
+                zorder=2, c=color[i], linewidth=4, alpha=0.35)
 
     # 绘制障碍物
     plot_obstacle(ini_obstacle_list)
