@@ -723,3 +723,190 @@ def plot_position_with_tasks(agent_list, ini_obstacle_list, obstacle_list,
     plt.close()
 
     print(f"已绘制轨迹和任务圆球，保存到: {filename}")
+
+
+def plot_all_pre_traj_with_dynamic_tasks(agent_list, ini_obstacle_list, obstacle_list,
+                                     task_schedule_path='../data/01_original_data/result_criticalpath_new.json',
+                                     task_list_path='../data/01_original_data/precomputed_data.json'):
+    """
+    绘制每一帧的轨迹，并根据 task_schedule 动态显示/隐藏任务
+
+    参数:
+        agent_list: 智能体列表
+        ini_obstacle_list: 初始障碍物列表
+        obstacle_list: 障碍物列表
+        task_schedule_path: task_schedule 数据文件路径
+        task_list_path: task_list 数据文件路径
+
+    说明:
+        - 每帧对应 0.5s
+        - 根据 task_schedule 判断任务是否在当前时间范围内
+        - 所有元素透明度统一为 0.2
+    """
+    import json
+    import os
+
+    # 加载 task_schedule
+    task_schedule = {}
+    try:
+        task_schedule_path_abs = os.path.abspath(os.path.join(os.getcwd(), task_schedule_path))
+        if not os.path.exists(task_schedule_path_abs):
+            task_schedule_path_abs = os.path.abspath(os.path.join(os.getcwd(), task_schedule_path))
+
+        with open(task_schedule_path_abs, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            task_schedule = data.get('task_schedule', {})
+    except FileNotFoundError:
+        print(f"警告: 未找到 task_schedule 文件 {task_schedule_path}")
+        task_schedule = {}
+
+    # 加载 task_list
+    task_list = []
+    try:
+        task_list_path_abs = os.path.abspath(os.path.join(os.getcwd(), task_list_path))
+        if not os.path.exists(task_list_path_abs):
+            task_list_path_abs = os.path.abspath(os.path.join(os.getcwd(), task_list_path))
+
+        with open(task_list_path_abs, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            task_list = data.get('task_list', [])
+    except FileNotFoundError:
+        print(f"警告: 未找到 task_list 文件 {task_list_path}")
+        task_list = []
+
+    # 创建 task_id 到 task 的映射
+    task_map = {task['task_id']: task for task in task_list}
+
+    # 任务类型颜色映射（透明度0.2）
+    task_type_colors = {
+        'surveillance': (1.0, 0.84, 0.44, 0.2),
+        'attack': (1.0, 0.42, 0.71, 0.2),
+        'capture': (0.30, 0.80, 0.55, 0.2),
+    }
+
+    episodes_path_list = []
+    ob_rate = 2
+    time_per_step = 0.5  # 每帧对应 0.5s
+
+    for step in range(len(agent_list[0].pre_traj_list)):
+        current_time = step * time_per_step
+
+        fig = plt.figure(figsize=(10, 10))
+        axes = fig.subplots(1, 1)
+
+        # 生成等间隔刻度的列表
+        num_ticks = 51
+        x_ticks = np.linspace(0, zr.set_xlim, num_ticks)
+        y_ticks = np.linspace(0, zr.set_ylim, num_ticks)
+        axes.tick_params(axis='x', labelrotation=90)
+        plt.xticks(x_ticks)
+        plt.yticks(y_ticks)
+
+        # 绘制当前时间范围内有效的任务
+        for task_id_str, schedule in task_schedule.items():
+            task_id = int(task_id_str)
+            start_time = schedule.get('start', 0)
+            end_time = schedule.get('end', float('inf'))
+
+            # 判断任务是否在当前时间范围内
+            if start_time <= current_time < end_time:
+                task = task_map.get(task_id)
+                if task:
+                    task_center = task.get('center')
+                    task_radius = task.get('radius')
+                    task_type = task.get('type', 'surveillance')
+
+                    if task_center and task_radius:
+                        task_color = task_type_colors.get(task_type, (0.5, 0.5, 0.5, 0.2))
+
+                        task_circle = Circle(
+                            (task_center[0], task_center[1]),
+                            task_radius,
+                            facecolor=task_color,
+                            edgecolor='black',
+                            linewidth=1.0,
+                            alpha=task_color[3],
+                            zorder=0,
+                        )
+                        axes.add_patch(task_circle)
+
+        # 绘制每个智能体的轨迹
+        for i in range(len(agent_list)):
+            if agent_list[i].type == "Anchor":
+                continue
+
+            # 当前位置圆圈
+            circle = Circle(
+                xy=agent_list[i].pre_traj_list[step][0],
+                radius=agent_list[i].physical_radius,
+                fc=color[i],
+                ec='k',
+                lw=0.5,
+                zorder=5,
+            )
+            import zyaml as zy
+            circle2 = Circle(
+                xy=agent_list[i].pre_traj_list[step][0],
+                radius=zy.parameters['radius'],
+                fc=color[i],
+                ec='k',
+                lw=0.5,
+                zorder=5,
+                alpha=0.2
+            )
+
+            plt.annotate(str(i),
+                         agent_list[i].pre_traj_list[step][0],
+                         textcoords="offset points",
+                         xytext=(0, 10),
+                         ha='center',
+                         fontsize=6)
+
+            axes.add_patch(p=circle)
+            axes.add_patch(p=circle2)
+
+            # 轨迹线（透明度0.2）
+            plt.plot(agent_list[i].pre_traj_list[step][:, 0],
+                     agent_list[i].pre_traj_list[step][:, 1],
+                     c=color[i],
+                     linewidth=3/ob_rate,
+                     alpha=0.2)
+
+            # 起点（透明度0.2）
+            plt.scatter(agent_list[i].position[0][0],
+                        agent_list[i].position[0][1],
+                        marker='s', s=40, zorder=1, edgecolor='k', color=color[i],
+                        alpha=0.2)
+
+            # 终点（透明度0.2）
+            plt.scatter(agent_list[i].target[0],
+                        agent_list[i].target[1],
+                        marker='d', s=40, zorder=3, edgecolor='k', color=color[i],
+                        alpha=0.2)
+
+            plt.annotate(str(i),
+                            (agent_list[i].target),
+                            textcoords="offset points",
+                            xytext=(0, 10),
+                            ha='center',
+                            fontsize=6)
+
+        # 绘制障碍物
+        plot_obstacle(ini_obstacle_list)
+        plot_obstacle(obstacle_list)
+        axes.set_ylabel('Y', fontdict={'size': 10, 'color': 'red'})
+        axes.set_xlabel('X', fontdict={'size': 10, 'color': 'red'})
+
+        # 设置坐标轴范围
+        plt.xlim(SET.plot_range['x'])
+        plt.ylim(SET.plot_range['y'])
+        axes.set_aspect('equal')
+
+        # 保存图片
+        filename = of.path_dir + 'savefig/episode-' + str(step) + SET.format
+        episodes_path_list.append(filename)
+        of.create_file(filename)
+        plt.savefig(filename, bbox_inches='tight')
+        plt.close()
+
+    return episodes_path_list
