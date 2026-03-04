@@ -49,17 +49,17 @@ def images_to_video(img_path_list):
 
     # 图片的大小需要一致
     img_array, size = resize(img_array, 'largest')
-    fps = 2    # 帧率设置
-    
+    fps = 5 * 3    # 帧率设置 (15 fps)
+
     # 获取当前文件所在的目录路径
     image_dir = os.path.dirname(os.path.abspath(img_path_list[0]))
 
     # 拼接目标文件的路径
-    target_file_path = os.path.join(image_dir, "a_video.avi")
+    target_file_path = os.path.join(image_dir, "a_video.mp4")
     # 确保目录存在
     if not os.path.exists(image_dir):
         os.makedirs(image_dir)
-    out = cv2.VideoWriter(target_file_path, cv2.VideoWriter_fourcc(*'DIVX'), fps, size)
+    out = cv2.VideoWriter(target_file_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, size)
 
     for i in range(len(img_array)):
         out.write(img_array[i])
