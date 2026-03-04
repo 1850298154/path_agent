@@ -56,8 +56,9 @@ def images_to_video(img_path_list):
 
     # 拼接目标文件的路径
     target_file_path = os.path.join(image_dir, "a_video.avi")
-    import output_filename as of
-    of.create_file(target_file_path)
+    # 确保目录存在
+    if not os.path.exists(image_dir):
+        os.makedirs(image_dir)
     out = cv2.VideoWriter(target_file_path, cv2.VideoWriter_fourcc(*'DIVX'), fps, size)
 
     for i in range(len(img_array)):
@@ -90,7 +91,7 @@ def produce_movie():
     import output_filename as of 
     image_dir = of.path_dir +r'\savefig\\'
     start_index = 0
-    end_index = 500
+    end_index = 1999
     img_path_list = get_img_path_list(image_dir,start_index,end_index)
     images_to_video(img_path_list)
 
