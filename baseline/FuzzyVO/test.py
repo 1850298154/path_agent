@@ -23,8 +23,8 @@ def main():
 
     config = Config()
 
-    # 测试模式：5智能体，50步
-    config.set_test_mode(num_agents=5, max_steps=50)
+    # 大规模测试：100智能体，863步
+    config.set_test_mode(num_agents=100, max_steps=863)
 
     num_agents = config.get_num_agents()
     max_steps = config.get_max_steps()
