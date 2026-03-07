@@ -1,0 +1,10 @@
+{
+    "success_rate": 0.8,
+    "collision_rate": 0.0,
+    "average_planning_time": 0.0001682942095785046,
+    "ex_collision_rate": 0.0,
+    "total_steps": 500,
+    "success_count": 4,
+    "collision_count": 0,
+    "ex_collision_count": 0
+}
