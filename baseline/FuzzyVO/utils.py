@@ -32,6 +32,7 @@ def save_statistics(output_dir, stats):
 def calculate_statistics(agent_list, total_steps):
     """计算统计指标"""
     num_agents = len(agent_list)
+
     success_count = sum(1 for a in agent_list if a.reached_target)
     success_rate = success_count / num_agents
 
@@ -58,60 +59,115 @@ def calculate_statistics(agent_list, total_steps):
     }
 
 
+def get_obstacle_vertices(obstacle, radius=0):
+    """
+    获取障碍物顶点列表（支持膨胀）
+    障碍物格式: (x, y, size)，其中(x,y)是左下角坐标
+
+    Args:
+        obstacle: (x, y, size)
+        radius: 膨胀半径
+
+    Returns:
+        [(x1,y1), (x2,y2), (x3,y3), (x4,y4)] 四个顶点
+    """
+    x, y, size = obstacle[0], obstacle[1], obstacle[2]
+    # 膨胀后的左下角和边长
+    x_new = x - radius
+    y_new = y - radius
+    size_new = size + 2 * radius
+
+    # 四个顶点（逆时针）
+    vertices = [
+        (x_new, y_new),               # 左下
+        (x_new + size_new, y_new),    # 右下
+        (x_new + size_new, y_new + size_new),  # 右上
+        (x_new, y_new + size_new),    # 左上
+    ]
+    return vertices
+
+
 def plot_trajectory_step(agent_list, obstacles, savefig_dir, step, map_xlim, map_ylim):
-    """绘制单步轨迹"""
+    """
+    绘制单步轨迹图
+
+    Args:
+        agent_list: 智能体列表
+        obstacles: 障碍物列表，格式为 [(x, y, size), ...]
+        savefig_dir: 保存目录
+        step: 当前步数
+        map_xlim, map_ylim: 地图范围
+    """
     fig, ax = plt.subplots(figsize=(10, 10))
+
+    # 颜色列表
     colors = plt.cm.tab20(np.linspace(0, 1, 20))
 
-    # 障碍物
+    # 绘制障碍物（原始大小，不膨胀）
     for ob in obstacles:
-        ob_x, ob_y, ob_size = ob[0], ob[1], ob[2]
-        half_size = ob_size / 2
-        rect = Rectangle((ob_x - half_size, ob_y - half_size), ob_size, ob_size,
-                        facecolor='forestgreen', alpha=0.3, edgecolor='darkgreen')
-        ax.add_patch(rect)
+        vertices = get_obstacle_vertices(ob, radius=0)
+        X = [v[0] for v in vertices] + [vertices[0][0]]  # 闭合
+        Y = [v[1] for v in vertices] + [vertices[0][1]]
+        ax.fill(X, Y, facecolor='forestgreen', alpha=0.3, edgecolor='darkgreen', linewidth=1)
 
-    # 智能体
+    # 绘制智能体
     for i, agent in enumerate(agent_list):
         color = colors[i % 20]
+
+        # 当前位置（圆形）
         if agent.damaged:
             circle = Circle(agent.p, agent.physical_radius, facecolor='red', edgecolor='black', alpha=0.7)
         elif agent.reached_target:
             circle = Circle(agent.p, agent.physical_radius, facecolor='lime', edgecolor='black', alpha=0.7)
         else:
             circle = Circle(agent.p, agent.physical_radius, facecolor=color, edgecolor='black')
+
         ax.add_patch(circle)
+
+        # 智能体编号
         ax.annotate(str(i), agent.p, textcoords="offset points", xytext=(0, 5), ha='center', fontsize=8)
+
+        # 目标位置（菱形）
         ax.scatter(agent.target[0], agent.target[1], marker='D', s=100, color=color, edgecolor='black', alpha=0.5)
 
+        # 绘制轨迹（最近20步）
         if len(agent.trajectory) > 1:
-            traj = np.array(agent.trajectory[-10:])
+            traj = np.array(agent.trajectory[-20:])
             ax.plot(traj[:, 0], traj[:, 1], '-', color=color, alpha=0.5, linewidth=1)
 
     ax.set_xlim(0, map_xlim)
     ax.set_ylim(0, map_ylim)
     ax.set_aspect('equal')
-    ax.set_title(f'FuzzyVO - Step {step}')
+    ax.set_title(f'FuzzyVO Baseline - Step {step}')
     ax.grid(True, alpha=0.3)
+
+    # 保存图片
     plt.savefig(os.path.join(savefig_dir, f'episode-{step}.jpg'), bbox_inches='tight', dpi=100)
     plt.close()
 
 
-def generate_video(savefig_dir, output_dir, max_steps):
-    """生成视频"""
+def generate_video(savefig_dir, output_dir, max_steps, step_interval=20):
+    """生成视频（只使用每隔step_interval步的图片）"""
     img_path_list = []
-    for step in range(max_steps):
+    for step in range(0, max_steps, step_interval):
         img_path = os.path.join(savefig_dir, f'episode-{step}.jpg')
         if os.path.exists(img_path):
             img_path_list.append(img_path)
 
+    # 加上最后一步
+    last_img = os.path.join(savefig_dir, f'episode-{max_steps-1}.jpg')
+    if os.path.exists(last_img) and last_img not in img_path_list:
+        img_path_list.append(last_img)
+
     if not img_path_list:
-        print("没有图片文件")
+        print("没有找到图片文件，无法生成视频")
         return
 
+    # 读取第一张图片获取尺寸
     img = cv2.imread(img_path_list[0])
     height, width = img.shape[:2]
 
+    # 创建视频写入器
     video_path = os.path.join(output_dir, 'a_video.avi')
     fps = 15
     fourcc = cv2.VideoWriter_fourcc(*'DIVX')
@@ -124,4 +180,4 @@ def generate_video(savefig_dir, output_dir, max_steps):
             out.write(img)
 
     out.release()
-    print(f"视频已保存: {video_path}")
+    print(f"视频已保存到: {video_path}")

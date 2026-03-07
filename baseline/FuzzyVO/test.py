@@ -23,8 +23,8 @@ def main():
 
     config = Config()
 
-    # 测试模式
-    config.set_test_mode(num_agents=5, max_steps=500)  # 500步足以让智能体到达目标
+    # 测试模式：5智能体，50步
+    config.set_test_mode(num_agents=5, max_steps=50)
 
     num_agents = config.get_num_agents()
     max_steps = config.get_max_steps()
@@ -90,15 +90,23 @@ def main():
                 agent.mark_damaged()
                 print(f"  Step {step}: Agent {agent.index} 外部碰撞")
 
-        # 绘图
-        if step % 10 == 0 or step == max_steps - 1:
-            plot_trajectory_step(agent_list, config.obstacle_list, savefig_dir, step, config.map_xlim, config.map_ylim)
+        # 绘图（每20步画一次）
+        if step % 20 == 0 or step == max_steps - 1:
+            plot_trajectory_step(
+                agent_list, config.obstacle_list, savefig_dir, step,
+                config.map_xlim, config.map_ylim
+            )
 
         # 检查完成
         all_done = all(a.reached_target or a.damaged for a in agent_list)
         if all_done:
             print(f"  所有智能体完成于 Step {step}")
             max_steps = step + 1
+            # 最后一步再画一张
+            plot_trajectory_step(
+                agent_list, config.obstacle_list, savefig_dir, step,
+                config.map_xlim, config.map_ylim
+            )
             break
 
         # 打印进度
@@ -125,7 +133,7 @@ def main():
 
     save_statistics(output_dir, stats)
     print("正在生成视频...")
-    generate_video(savefig_dir, output_dir, max_steps)
+    generate_video(savefig_dir, output_dir, max_steps, step_interval=20)
 
     print("\n" + "=" * 60)
     print("程序结束")

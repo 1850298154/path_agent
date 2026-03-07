@@ -322,7 +322,39 @@ ob_2d/
 
 ---
 
-## 十一、参考链接
+## 十一、核心代码位置
+
+### 11.1 CBF基线核心代码
+
+[CBF/agent.py:45](CBF/agent.py#L45)
+
+`compute_cbf_risk()` - CBF风险度量函数，基于距离评估碰撞风险
+
+[CBF/agent.py:78](CBF/agent.py#L78)
+
+`compute_velocity_command()` - 速度计算函数，组合目标方向与避障速度
+
+[CBF/agent.py:182](CBF/agent.py#L182)
+
+`check_external_collision()` - 外部碰撞检测，判断智能体是否在膨胀障碍物内
+
+### 11.2 FuzzyVO基线核心代码
+
+[FuzzyVO/agent.py:40](FuzzyVO/agent.py#L40)
+
+`compute_velocity_obstacle()` - 速度障碍物计算，返回会导致碰撞的速度区域
+
+[FuzzyVO/agent.py:86](FuzzyVO/agent.py#L86)
+
+`fuzzy_avoidance()` - 模糊规则避障，根据危险程度调整速度
+
+[FuzzyVO/agent.py:117](FuzzyVO/agent.py#L117)
+
+`compute_velocity_command()` - 速度计算函数，组合VO与模糊避障
+
+---
+
+## 十二、参考链接
 
 - CBF论文: https://arxiv.org/abs/2503.09621
 - FuzzyVO论文: https://xueshu.baidu.com/usercenter/paper/show?paperid=156t00p0ne1v0e80en5s02f0gr315192
