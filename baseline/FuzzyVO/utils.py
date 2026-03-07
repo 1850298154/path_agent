@@ -181,3 +181,58 @@ def generate_video(savefig_dir, output_dir, max_steps, step_interval=20):
 
     out.release()
     print(f"视频已保存到: {video_path}")
+
+
+def plot_trajectory_final(agent_list, obstacles, output_dir, map_xlim, map_ylim, title='Trajectory'):
+    """
+    绘制最终完整轨迹图
+
+    Args:
+        agent_list: 智能体列表
+        obstacles: 障碍物列表
+        output_dir: 输出目录
+        map_xlim, map_ylim: 地图范围
+        title: 图标题
+    """
+    fig, ax = plt.subplots(figsize=(12, 12))
+
+    # 颜色列表
+    colors = plt.cm.tab20(np.linspace(0, 1, 20))
+
+    # 绘制障碍物
+    for ob in obstacles:
+        vertices = get_obstacle_vertices(ob, radius=0)
+        X = [v[0] for v in vertices] + [vertices[0][0]]
+        Y = [v[1] for v in vertices] + [vertices[0][1]]
+        ax.fill(X, Y, facecolor='forestgreen', alpha=0.3, edgecolor='darkgreen', linewidth=1)
+
+    # 绘制每个智能体的轨迹
+    for i, agent in enumerate(agent_list):
+        color = colors[i % 20]
+
+        # 起点（方形）
+        ax.scatter(agent.start_pos[0], agent.start_pos[1],
+                   marker='s', s=60, zorder=3, edgecolor='black', color=color, alpha=0.7)
+
+        # 终点（菱形）
+        ax.scatter(agent.target[0], agent.target[1],
+                   marker='d', s=60, zorder=3, edgecolor='black', color=color, alpha=0.5)
+
+        # 完整轨迹线
+        if len(agent.trajectory) > 1:
+            traj = np.array(agent.trajectory)
+            ax.plot(traj[:, 0], traj[:, 1], '-', color=color, linewidth=1.5, alpha=0.7)
+
+    ax.set_xlim(0, map_xlim)
+    ax.set_ylim(0, map_ylim)
+    ax.set_aspect('equal')
+    ax.set_title(f'{title} - Final Trajectory', fontsize=14)
+    ax.set_xlabel('X', fontsize=12)
+    ax.set_ylabel('Y', fontsize=12)
+    ax.grid(True, alpha=0.3)
+
+    # 保存
+    save_path = os.path.join(output_dir, 'trajectory.jpg')
+    plt.savefig(save_path, bbox_inches='tight', dpi=150)
+    plt.close()
+    print(f"完整轨迹图已保存: {save_path}")

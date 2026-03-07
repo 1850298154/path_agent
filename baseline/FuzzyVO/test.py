@@ -12,7 +12,7 @@ from config import Config
 from agent import FuzzyVOAgent
 from utils import (
     get_timestamp, create_output_dir, save_statistics,
-    calculate_statistics, plot_trajectory_step, generate_video
+    calculate_statistics, plot_trajectory_step, plot_trajectory_final, generate_video
 )
 
 
@@ -132,6 +132,12 @@ def main():
     print()
 
     save_statistics(output_dir, stats)
+
+    # 绘制完整轨迹图
+    print("正在绘制完整轨迹图...")
+    plot_trajectory_final(agent_list, config.obstacle_list, output_dir,
+                          config.map_xlim, config.map_ylim, title='FuzzyVO Baseline')
+
     print("正在生成视频...")
     generate_video(savefig_dir, output_dir, max_steps, step_interval=20)
 
