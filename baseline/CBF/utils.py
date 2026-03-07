@@ -114,13 +114,13 @@ def plot_trajectory_step(agent_list, obstacles, savefig_dir, step, map_xlim, map
     for i, agent in enumerate(agent_list):
         color = colors[i % 20]
 
-        # 当前位置（圆形）
+        # 当前位置（圆形）- 使用安全半径radius（1.0）而非物理半径physical_radius（0.25）
         if agent.damaged:
-            circle = Circle(agent.p, agent.physical_radius, facecolor='red', edgecolor='black', alpha=0.7)
+            circle = Circle(agent.p, agent.radius, facecolor='red', edgecolor='black', alpha=0.7)
         elif agent.reached_target:
-            circle = Circle(agent.p, agent.physical_radius, facecolor='lime', edgecolor='black', alpha=0.7)
+            circle = Circle(agent.p, agent.radius, facecolor='lime', edgecolor='black', alpha=0.7)
         else:
-            circle = Circle(agent.p, agent.physical_radius, facecolor=color, edgecolor='black')
+            circle = Circle(agent.p, agent.radius, facecolor=color, edgecolor='black')
 
         ax.add_patch(circle)
 
