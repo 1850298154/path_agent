@@ -39,13 +39,11 @@ class CBFAgent:
         self.plan_time_list = []
 
         # CBF相关参数
-        self.risk_threshold = 2.0     # 风险阈值
-        self.safety_margin = 1.5      # 安全边际系数
+        self.safety_distance = self.radius * 4  # 安全距离，提前避障
 
     def compute_cbf_risk(self, other_agents, obstacles):
         """
         计算CBF启发的风险度量
-        简化版本：基于距离的风险评估
         """
         risk = 0.0
 
@@ -55,29 +53,59 @@ class CBFAgent:
                 continue
 
             dist = np.linalg.norm(self.p - other.p)
-            if dist < self.r_min * self.safety_margin:
-                # 距离越近风险越大
-                risk += max(0, (self.r_min * self.safety_margin - dist) / self.r_min)
+            if dist < self.safety_distance:
+                risk += max(0, (self.safety_distance - dist) / self.safety_distance)
 
         # 与障碍物的碰撞风险
         for ob in obstacles:
             ob_x, ob_y, ob_size = ob[0], ob[1], ob[2]
-            # 障碍物中心（ob_x, ob_y是左下角坐标）
-            ob_center = np.array([ob_x + ob_size/2, ob_y + ob_size/2])
-            half_size = ob_size / 2 + self.radius  # 膨胀后的半边长
-
-            # 简化：用圆近似障碍物
-            dist_to_center = np.linalg.norm(self.p - ob_center)
-            effective_radius = half_size * 1.414  # 正方形对角线一半
-
-            if dist_to_center < effective_radius:
-                risk += (effective_radius - dist_to_center) / self.radius
+            # 计算到障碍物的最短距离
+            dist_to_ob = self._distance_to_obstacle(self.p, ob)
+            if dist_to_ob < self.safety_distance:
+                risk += max(0, (self.safety_distance - dist_to_ob) / self.safety_distance)
 
         return risk
 
+    def _distance_to_obstacle(self, point, obstacle):
+        """计算点到矩形障碍物的最短距离"""
+        x, y, size = obstacle[0], obstacle[1], obstacle[2]
+        # 矩形边界
+        left, right = x, x + size
+        bottom, top = y, y + size
+
+        # 点到矩形的最短距离
+        dx = max(left - point[0], 0, point[0] - right)
+        dy = max(bottom - point[1], 0, point[1] - top)
+        return np.sqrt(dx**2 + dy**2)
+
+    def _get_obstacle_avoidance_direction(self, obstacle):
+        """获取绕过障碍物的最佳方向"""
+        x, y, size = obstacle[0], obstacle[1], obstacle[2]
+        ob_center = np.array([x + size/2, y + size/2])
+
+        # 从障碍物中心到智能体的方向
+        to_agent = self.p - ob_center
+        dist = np.linalg.norm(to_agent)
+
+        if dist < 0.01:
+            # 在障碍物中心，随机选一个方向
+            return np.array([1.0, 0.0])
+
+        # 计算绕行方向（垂直于到障碍物的方向）
+        perpendicular = np.array([-to_agent[1], to_agent[0]]) / dist
+
+        # 选择更靠近目标的方向
+        to_target = self.target - self.p
+        to_target_norm = to_target / (np.linalg.norm(to_target) + 0.01)
+
+        if np.dot(perpendicular, to_target_norm) > 0:
+            return perpendicular
+        else:
+            return -perpendicular
+
     def compute_velocity_command(self, other_agents, obstacles):
         """
-        计算速度命令 - 简化的CBF避障策略
+        计算速度命令 - 改进的CBF避障策略
         """
         start_time = time.time()
 
@@ -94,11 +122,44 @@ class CBFAgent:
 
         # 理想速度方向（指向目标）
         desired_direction = to_target / dist_to_target
+        desired_velocity = desired_direction * self.vmax
 
-        # 计算避障调整
+        # 初始化避障速度
         avoidance_velocity = np.zeros(2)
 
-        # 与其他智能体的避障
+        # ===== 障碍物避障（优先级最高） =====
+        for ob in obstacles:
+            ob_x, ob_y, ob_size = ob[0], ob[1], ob[2]
+            dist_to_ob = self._distance_to_obstacle(self.p, ob)
+
+            # 膨胀后的安全距离 - 增大检测范围
+            safe_dist = self.radius * 3 + ob_size * 0.5
+
+            if dist_to_ob < safe_dist * 5:  # 更远距离检测
+                # 绕行方向
+                avoid_dir = self._get_obstacle_avoidance_direction(ob)
+
+                # 避障强度：距离越近越强
+                if dist_to_ob < safe_dist:
+                    strength = 3.0  # 非常近，强力避障
+                elif dist_to_ob < safe_dist * 2:
+                    strength = 2.0
+                elif dist_to_ob < safe_dist * 3:
+                    strength = 1.0
+                else:
+                    strength = (safe_dist * 5 - dist_to_ob) / safe_dist
+
+                avoidance_velocity += avoid_dir * strength * self.vmax
+
+                # 同时添加排斥力（远离障碍物）
+                ob_center = np.array([ob_x + ob_size/2, ob_y + ob_size/2])
+                to_agent = self.p - ob_center
+                dist_center = np.linalg.norm(to_agent)
+                if dist_center > 0.01:
+                    repulsion = to_agent / dist_center * strength * 1.0
+                    avoidance_velocity += repulsion
+
+        # ===== 智能体避障 =====
         for other in other_agents:
             if other.index == self.index or other.damaged:
                 continue
@@ -106,40 +167,34 @@ class CBFAgent:
             diff = self.p - other.p
             dist = np.linalg.norm(diff)
 
-            if dist < self.r_min * 2 and dist > 0.01:
-                # 计算排斥速度
-                repulsion_strength = (self.r_min * 2 - dist) / (self.r_min * 2)
-                avoidance_velocity += repulsion_strength * (diff / dist)
+            if dist < self.safety_distance * 2 and dist > 0.01:
+                # 排斥方向
+                repulsion_dir = diff / dist
 
-        # 与障碍物的避障
-        for ob in obstacles:
-            ob_x, ob_y, ob_size = ob[0], ob[1], ob[2]
-            # 障碍物中心（ob_x, ob_y是左下角坐标）
-            ob_center = np.array([ob_x + ob_size/2, ob_y + ob_size/2])
+                # 避障强度
+                if dist < self.r_min:
+                    strength = 2.0
+                elif dist < self.r_min * 2:
+                    strength = (self.r_min * 2 - dist) / self.r_min
+                else:
+                    strength = (self.safety_distance * 2 - dist) / self.safety_distance
 
-            # 膨胀后的障碍物边界
-            inflated_half_size = ob_size / 2 + self.radius * 2
+                avoidance_velocity += repulsion_dir * strength * self.vmax
 
-            diff = self.p - ob_center
-            dist = np.linalg.norm(diff)
-
-            # 计算到矩形的最短距离（简化用圆）
-            effective_radius = inflated_half_size * 0.7
-
-            if dist < effective_radius and dist > 0.01:
-                repulsion_strength = (effective_radius - dist) / effective_radius
-                avoidance_velocity += repulsion_strength * (diff / dist) * 2
-
-        # 组合速度命令
-        # 风险越大，避障权重越高
+        # ===== 组合速度 =====
         risk = self.compute_cbf_risk(other_agents, obstacles)
-        avoidance_weight = min(1.0, risk * 0.5)
 
-        velocity_cmd = (1 - avoidance_weight) * desired_direction + avoidance_weight * avoidance_velocity
+        if risk > 0.1:
+            # 有风险时，混合目标速度和避障速度
+            avoidance_weight = min(0.8, risk * 0.6)  # 最大0.8，保证还有目标方向
+            velocity_cmd = (1 - avoidance_weight) * desired_velocity + avoidance_weight * avoidance_velocity
+        else:
+            velocity_cmd = desired_velocity
 
-        # 归一化并限制速度
-        if np.linalg.norm(velocity_cmd) > 0.01:
-            velocity_cmd = velocity_cmd / np.linalg.norm(velocity_cmd) * self.vmax
+        # 限制速度
+        speed = np.linalg.norm(velocity_cmd)
+        if speed > self.vmax:
+            velocity_cmd = velocity_cmd / speed * self.vmax
 
         # 规划时间
         self.plan_time_list.append(time.time() - start_time)
