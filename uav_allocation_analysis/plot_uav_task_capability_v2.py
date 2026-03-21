@@ -322,11 +322,10 @@ def plot_uav_capability_matrix(output_path):
     uav_list = data['uav_list']
     task_list = data['task_list']
 
-    fig, ax = plt.subplots(figsize=(24, 20))
+    fig, ax = plt.subplots(figsize=(20, 8))
 
     # 创建能力矩阵
-    # 值: 0=不能, 1=A阶段, 2=B阶段, 3=A+B阶段
-    matrix = np.zeros((80, 30, 3))  # 3通道: surveillance, attack, capture
+    matrix = np.zeros((80, 30, 3))
 
     for i, uav in enumerate(uav_list):
         capabilities = get_uav_capabilities(uav['type'])
@@ -343,9 +342,9 @@ def plot_uav_capability_matrix(output_path):
                 elif 'B' in phases:
                     matrix[i, j, ['surveillance', 'attack', 'capture'].index(task_type)] = 2
 
-    # 绘制矩阵
-    cell_width = 0.8
-    cell_height = 0.3
+    # 绘制矩阵 - 纵轴缩小一半 (cell高度0.5)
+    cell_width = 1.0
+    cell_height = 0.5
 
     for i in range(80):
         for j in range(30):
@@ -363,45 +362,35 @@ def plot_uav_capability_matrix(output_path):
                 color = TASK_COLORS[task_type]['B']
             else:  # val == 3
                 # 画两半
-                rect1 = Rectangle((j * cell_width, i * cell_height),
-                                  cell_width / 2, cell_height,
+                rect1 = Rectangle((j, (79-i)*cell_height), 0.5, cell_height,
                                   facecolor=TASK_COLORS[task_type]['A'],
-                                  edgecolor='gray', linewidth=0.3)
-                rect2 = Rectangle((j * cell_width + cell_width / 2, i * cell_height),
-                                  cell_width / 2, cell_height,
+                                  edgecolor='gray', linewidth=0.2)
+                rect2 = Rectangle((j+0.5, (79-i)*cell_height), 0.5, cell_height,
                                   facecolor=TASK_COLORS[task_type]['B'],
-                                  edgecolor='gray', linewidth=0.3)
+                                  edgecolor='gray', linewidth=0.2)
                 ax.add_patch(rect1)
                 ax.add_patch(rect2)
                 continue
 
-            rect = Rectangle((j * cell_width, i * cell_height),
-                            cell_width, cell_height,
-                            facecolor=color, edgecolor='gray', linewidth=0.3)
+            rect = Rectangle((j, (79-i)*cell_height), cell_width, cell_height,
+                            facecolor=color, edgecolor='gray', linewidth=0.2)
             ax.add_patch(rect)
 
     # 设置坐标轴
-    ax.set_xlim(0, 30 * cell_width)
-    ax.set_ylim(0, 80 * cell_height)
+    ax.set_xlim(0, 30)
+    ax.set_ylim(0, 80*cell_height)
 
-    # 添加任务类型标签
-    for j, task in enumerate(task_list):
-        task_type = task['type']
-        color = TASK_COLORS[task_type]['A']
-        ax.text(j * cell_width + cell_width/2, 80 * cell_height + 0.5,
-               f"{task['task_id']}\n{task_type[:3]}", ha='center', va='bottom',
-               fontsize=6, rotation=0, color=color)
+    # X轴标签
+    ax.set_xticks(np.arange(0.5, 30.5, 1))
+    ax.set_xticklabels(range(30), fontsize=8)
+    ax.set_xlabel('Task ID', fontsize=12, fontweight='bold')
 
-    # 添加UAV标签（每10个显示一次）
-    for i in range(0, 80, 10):
-        ax.text(-0.5, i * cell_height + cell_height * 5, f'UAV {i}-{i+9}',
-               ha='right', va='center', fontsize=8)
+    # Y轴标签 - 每10个显示一次
+    ax.set_yticks(np.arange(5, 80*cell_height, 10*cell_height))
+    ax.set_yticklabels(range(10, 80, 10), fontsize=7)
+    ax.set_ylabel('UAV ID', fontsize=12, fontweight='bold')
 
-    ax.axis('off')
-    ax.set_title('UAV-Task Capability Matrix\n'
-                 'Colors: Gold=Surveillance, Red=Attack, Cyan=Capture\n'
-                 'Left half=A phase, Right half=B phase',
-                 fontsize=12, fontweight='bold', pad=10)
+    ax.set_title('UAV-Task Capability Matrix', fontsize=16, fontweight='bold')
 
     plt.tight_layout()
     plt.savefig(output_path, dpi=150, bbox_inches='tight')
