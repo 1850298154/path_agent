@@ -142,6 +142,64 @@ $$\quad\quad \|u_i^{k-1}\|_a \leq a_{max}, \quad k \in \mathcal{K}$$
 
 ## 1.4 死锁条件的KKT分析
 
+### 1.4.0 KKT条件简介
+
+**KKT条件（Karush-Kuhn-Tucker Conditions）** 是非线性规划中带约束优化问题的必要最优性条件，是拉格朗日乘数法在不等式约束问题上的推广。
+
+#### 一般优化问题形式
+
+考虑带约束的优化问题：
+
+$$\min_x f(x)$$
+$$\text{s.t.} \quad g_i(x) \leq 0, \quad i = 1, \ldots, m$$
+$$\quad\quad h_j(x) = 0, \quad j = 1, \ldots, p$$
+
+其中 $f(x)$ 是目标函数，$g_i(x) \leq 0$ 是不等式约束，$h_j(x) = 0$ 是等式约束。
+
+#### KKT条件的四个组成部分
+
+构造拉格朗日函数：
+$$\mathcal{L}(x, \lambda, \mu) = f(x) + \sum_{i=1}^{m} \lambda_i g_i(x) + \sum_{j=1}^{p} \mu_j h_j(x)$$
+
+**1. 稳定性条件（Stationarity）**
+$$\nabla_x \mathcal{L} = \nabla f(x) + \sum_{i=1}^{m} \lambda_i \nabla g_i(x) + \sum_{j=1}^{p} \mu_j \nabla h_j(x) = 0$$
+
+**2. 原始可行性（Primal Feasibility）**
+$$g_i(x) \leq 0, \quad h_j(x) = 0$$
+
+**3. 对偶可行性（Dual Feasibility）**
+$$\lambda_i \geq 0, \quad \forall i$$
+
+**4. 互补松弛条件（Complementary Slackness）**
+$$\lambda_i g_i(x) = 0, \quad \forall i$$
+
+互补松弛条件的物理意义：
+- 若 $\lambda_i > 0$，则 $g_i(x) = 0$（约束起作用，在边界上）
+- 若 $g_i(x) < 0$，则 $\lambda_i = 0$（约束不起作用，在可行域内部）
+
+#### KKT条件在本论文中的作用
+
+在本文的多机器人轨迹规划中，KKT条件被用于**推导死锁发生的必要条件**：
+
+| 步骤 | 内容 | 说明 |
+|------|------|------|
+| 1 | 构造拉格朗日函数 | 将所有约束（动力学、碰撞避免、速度/加速度限制）通过拉格朗日乘子纳入目标函数 |
+| 2 | 应用稳定性条件 | 对状态变量求偏导等于零，得到力的平衡方程 |
+| 3 | 应用互补松弛条件 | 在死锁状态下，速度和加速度为零，相关乘子为零 |
+| 4 | 推导死锁条件 | 得到吸引力与排斥力平衡的充要条件 |
+
+**核心思想**：
+
+当机器人处于死锁状态时：
+- 机器人静止：$u_i^{k-1} = 0_d$，$v_i^k = 0_d$
+- 优化问题的最优解恰好满足KKT条件
+- 通过KKT条件，可以将死锁转化为**力的平衡方程**：
+  $$\underbrace{Q_K (p_i^{target} - p_i^K)}_{\text{吸引力}} + \underbrace{\sum_{j \in \mathcal{N}^i} \gamma_{ij} \frac{\alpha_{ij}}{w_{ij}} a_{ij}^K}_{\text{排斥力之和}} = 0$$
+
+这个力平衡方程揭示了死锁的本质：**目标对机器人的吸引力与来自其他机器人的排斥力达到平衡**。
+
+---
+
 ### 1.4.1 死锁定义
 
 **定义（死锁）**：死锁发生在所有机器人相互阻塞并无限期保持静止，但至少有一个机器人未到达目标位置。
