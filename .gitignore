@@ -216,3 +216,6 @@ __marimo__/
 
 # Large agent list pickle files (temporary data)
 **/agent_list_100.pkl
+
+
+*zip
