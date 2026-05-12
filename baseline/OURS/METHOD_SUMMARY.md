@@ -104,7 +104,7 @@ $$\|(1-\lambda)p_i^{k-1} + \lambda p_i^k - p_j^{k-1} - \lambda(p_j^k - p_j^{k-1}
 $$C_i = C_{w_i} + C_{p_i}$$
 
 **警告带惩罚项**：
-$$C_{w_i} = \sum_{j \neq i} \gamma_{ij}\left(\frac{\epsilon}{w_{ij}} - \ln w_{ij}\right)$$
+$$C_{w_i} = \sum_{j \neq i} \gamma_{ij}\left(\frac{w_{ij}}{\epsilon} - \ln w_{ij}\right)$$
 
 其中 $\gamma_{ij} > 0$ 是死锁解析参数。
 
@@ -529,10 +529,10 @@ $$C_i = C_{p_i} + C_{a_i} + C_{w_i}$$
 $$C_{p_i} = \frac{1}{2}Q_K \|p_i^K - p_i^{target}\|^2 + \frac{1}{2}\sum_{k=1}^{K-1} Q_k \|p_i^{k+1} - p_i^k\|^2$$
 
 **机器人间警告带惩罚项**：
-$$C_{a_i} = \sum_{j \neq i} \gamma_{ij}\left(\frac{\epsilon}{w_{ij}} - \ln w_{ij}\right)$$
+$$C_{a_i} = \sum_{j \neq i} \gamma_{ij}\left(\frac{w_{ij}}{\epsilon} - \ln w_{ij}\right)$$
 
 **障碍物警告带惩罚项**：
-$$C_{w_i} = \sum_{o \in \mathcal{W}} \gamma_{io}\left(\frac{\omega}{w_{oi}} - \ln w_{oi}\right)$$
+$$C_{w_i} = \sum_{o \in \mathcal{W}} \gamma_{io}\left(\frac{w_{oi}}{\omega} - \ln w_{oi}\right)$$
 
 ### 2.3.2 完整优化
 
