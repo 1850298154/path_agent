@@ -60,23 +60,23 @@ $$\bar{P}_i(t) = [\bar{p}_i^1(t), \bar{p}_i^2(t), \ldots, \bar{p}_i^K(t)]$$
 
 对于任意机器人对 $(i, j)$ 且 $j \neq i$，定义MBVC-WB：
 
-$$V_{ij}^k = \left\{ p \in \mathbb{R}^d \middle| \frac{(p - \bar{p}_i^k + \bar{p}_j^k)^T \bar{p}_{ij}^k}{\|\bar{p}_{ij}^k\|} \leq r_{ij}^k \right\}$$
+$$V_{ij}^k = \left\{ p \in \mathbb{R}^d \,\Bigg|\, \left( p - \frac{\bar{p}_i^k + \bar{p}_j^k}{2} \right)^T \frac{\bar{p}_{ij}^k}{\|\bar{p}_{ij}^k\|} \geq r_{ij}^k \right\}$$
 
 其中：
 - $\bar{p}_{ij}^k = \bar{p}_i^k - \bar{p}_j^k$
 - 缓冲宽度：
 $$r_{ij}^k = \begin{cases} \frac{\bar{r}_{min}}{2}, & k \in \tilde{\mathcal{K}} \\ \frac{\bar{r}_{min}}{2} + w_{ij}, & k = K \end{cases}$$
-- 扩展缓冲宽度：
-$$\bar{r}_{min} = \sqrt{r_{min}^2 + h^2 v_{max}^2}$$
+- 扩展缓冲宽度（考虑相向运动相对速度 $2v_{\max}$）：
+$$\bar{r}_{min} = \sqrt{r_{min}^2 + (2h v_{max})^2} = \sqrt{r_{min}^2 + 4 h^2 v_{max}^2}$$
 - $w_{ij} \in [0, \epsilon]$ 是警告带距离变量，$\epsilon$ 是警告带最大宽度
 
 ### 1.2.3 线性约束转换
 
 **非终端时刻约束**：
-$$a_{ij}^k \cdot p_i^k \leq b_{ij}^k, \quad j \neq i, k \in \tilde{\mathcal{K}}$$
+$$a_{ij}^k \cdot p_i^k \geq b_{ij}^k, \quad j \neq i, k \in \tilde{\mathcal{K}}$$
 
 **终端时刻约束**：
-$$a_{ij}^K \cdot p_i^K \leq b_{ij}^K + w_{ij}, \quad j \neq i$$
+$$a_{ij}^K \cdot p_i^K \geq b_{ij}^K + w_{ij}, \quad j \neq i$$
 
 其中系数为：
 $$a_{ij}^k = \frac{\bar{p}_{ij}^k}{\|\bar{p}_{ij}^k\|}, \quad b_{ij}^k = a_{ij}^k \cdot \frac{\bar{p}_i^k + \bar{p}_j^k}{2} + \frac{\bar{r}_{min}}{2}$$
@@ -130,8 +130,8 @@ $$v_i^K = 0_d$$
 
 $$\min_{\{u_i^{k-1}, x_i^k, w_{ij}\}} C_i$$
 
-$$\text{s.t.} \quad a_{ij}^k \cdot p_i^k \leq b_{ij}^k, \quad j \neq i, k \in \tilde{\mathcal{K}}$$
-$$\quad\quad a_{ij}^K \cdot p_i^K \leq b_{ij}^K + w_{ij}, \quad j \neq i$$
+$$\text{s.t.} \quad a_{ij}^k \cdot p_i^k \geq b_{ij}^k, \quad j \neq i, k \in \tilde{\mathcal{K}}$$
+$$\quad\quad a_{ij}^K \cdot p_i^K \geq b_{ij}^K + w_{ij}, \quad j \neq i$$
 $$\quad\quad 0 \leq w_{ij} \leq \epsilon$$
 $$\quad\quad v_i^K = 0_d$$
 $$\quad\quad x_i^k = Ax_i^{k-1} + Bu_i^{k-1}, \quad k \in \mathcal{K}$$
@@ -538,8 +538,8 @@ $$C_{w_i} = \sum_{o \in \mathcal{W}} \gamma_{io}\left(\frac{\omega}{w_{oi}} - \l
 
 $$\min_{\{U_i, X_i, w_{ij}, w_{oi}\}} C_i$$
 
-$$\text{s.t.} \quad a_{ij}^k \cdot p_i^k \leq b_{ij}^k, \quad j \neq i, k \in \tilde{\mathcal{K}}$$
-$$\quad\quad a_{ij}^K \cdot p_i^K \leq b_{ij}^K + w_{ij}, \quad j \neq i$$
+$$\text{s.t.} \quad a_{ij}^k \cdot p_i^k \geq b_{ij}^k, \quad j \neq i, k \in \tilde{\mathcal{K}}$$
+$$\quad\quad a_{ij}^K \cdot p_i^K \geq b_{ij}^K + w_{ij}, \quad j \neq i$$
 $$\quad\quad 0 \leq w_{ij} \leq \epsilon$$
 $$\quad\quad v_i^K = 0$$
 $$\quad\quad x_i^k = Ax_i^{k-1} + Bu_i^{k-1}, \quad k \in \mathcal{K}$$
